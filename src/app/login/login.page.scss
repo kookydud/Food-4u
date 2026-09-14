@@ -1,0 +1,545 @@
+.login-content {
+  --background: #f5f5f5;
+  padding: 0;
+
+  .hero-section {
+    position: relative;
+    background: linear-gradient(135deg, #7b2cbf 0%, #c77dff 100%);
+    padding: 40px 20px 30px;
+    text-align: center;
+    color: white;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    overflow: hidden;
+
+    .hero-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+
+      .circle {
+        position: absolute;
+        display: block;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .circle-left {
+        width: 120px;
+        height: 120px;
+        left: -30px;
+        top: 18px;
+      }
+
+      .circle-right {
+        width: 150px;
+        height: 150px;
+        right: -40px;
+        top: 28px;
+      }
+
+      .circle-small {
+        width: 70px;
+        height: 70px;
+        right: 25%;
+        top: 6px;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .logo-container {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+
+      .logo-box {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        font-size: 40px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    .app-title {
+      position: relative;
+      z-index: 1;
+      font-size: 36px;
+      font-weight: 700;
+      margin: 10px 0 5px 0;
+      letter-spacing: -0.5px;
+
+      .highlight {
+        color: #ffde00;
+      }
+    }
+
+    .tagline {
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      margin: 0;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+  }
+
+  .form-card {
+    margin: -20px 15px 20px;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    overflow: hidden;
+    background: #ffffff;
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      background: #f0f0f0;
+      border-radius: 18px;
+      margin: 18px 18px 0;
+
+      .tab {
+        flex: 1;
+        padding: 14px 10px;
+        border: none;
+        background: transparent;
+        border-radius: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #7b7b7b;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        position: relative;
+
+        &.active {
+          background: #ffffff;
+          color: #292929;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
+
+    .auth-form-panel {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-form,
+    .signup-form {
+      padding: 15px 20px;
+      animation: fadeSlideIn 0.28s ease;
+
+      .form-group {
+        margin-bottom: 20px;
+
+        label {
+          display: block;
+          font-size: 13px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 8px;
+        }
+
+        .form-input {
+          --padding-start: 16px;
+          --padding-end: 16px;
+          --padding-top: 12px;
+          --padding-bottom: 12px;
+          background: #f0f0f5;
+          border-radius: 12px;
+          border: none;
+          font-size: 15px;
+
+          &::placeholder {
+            color: #999;
+          }
+        }
+
+        .password-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          .form-input {
+            flex: 1;
+          }
+
+          .show-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: #7b2cbf;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+          }
+        }
+      }
+
+      .forgot-password {
+        text-align: right;
+        margin-bottom: 20px;
+
+        a {
+          font-size: 13px;
+          color: #7b2cbf;
+          text-decoration: none;
+          font-weight: 500;
+        }
+      }
+
+      .sign-in-btn {
+        --background: linear-gradient(135deg, #7b2cbf 0%, #c77dff 100%);
+        --border-radius: 20px;
+        height: 50px;
+        font-size: 16px;
+        --color: white;
+        font-weight: 600;
+        text-transform: none;
+        margin: 10px 0 20px 0;
+      }
+    }
+
+    .divider-text {
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      margin: 10px 0 15px;
+    }
+
+    .social-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 20px 20px;
+
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #d0d0d0;
+          background: #f9f9f9;
+        }
+
+        .icon {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .footer-text {
+      padding: 15px 20px 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+
+      a {
+        color: #7b2cbf;
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Small phones (320px - 375px) */
+@media (max-width: 375px) {
+  .login-content {
+    .hero-section {
+      padding: 30px 15px 25px;
+
+      .logo-container .logo-box {
+        width: 65px;
+        height: 65px;
+        font-size: 32px;
+      }
+
+      .app-title {
+        font-size: 28px;
+      }
+
+      .tagline {
+        font-size: 12px;
+      }
+    }
+
+    .form-card {
+      margin: -15px 10px 15px;
+      border-radius: 20px;
+
+      .tabs .tab {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .welcome-message {
+        padding: 15px 15px 8px;
+
+        h2 {
+          font-size: 18px;
+        }
+      }
+
+      .login-form {
+        padding: 12px 15px;
+
+        .form-group {
+          margin-bottom: 15px;
+
+          label {
+            font-size: 12px;
+          }
+
+          .form-input {
+            --padding-start: 12px;
+            --padding-end: 12px;
+            font-size: 14px;
+          }
+
+          .password-wrapper .show-password {
+            font-size: 11px;
+            right: 8px;
+          }
+        }
+
+        .sign-in-btn {
+          height: 45px;
+          font-size: 15px;
+        }
+      }
+
+      .divider-text {
+        font-size: 12px;
+        margin: 8px 0 10px;
+      }
+
+      .social-buttons {
+        gap: 10px;
+        padding: 0 15px 15px;
+
+        .social-btn {
+          padding: 10px;
+          font-size: 12px;
+
+          .icon {
+            font-size: 16px;
+          }
+        }
+      }
+
+      .footer-text {
+        padding: 12px 15px 15px;
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+/* Medium phones (376px - 425px) */
+@media (min-width: 376px) and (max-width: 425px) {
+  .login-content {
+    .hero-section {
+      padding: 35px 18px 28px;
+
+      .logo-container .logo-box {
+        width: 72px;
+        height: 72px;
+        font-size: 36px;
+      }
+
+      .app-title {
+        font-size: 32px;
+      }
+
+      .tagline {
+        font-size: 13px;
+      }
+    }
+
+    .form-card {
+      margin: -18px 12px 18px;
+
+      .welcome-message {
+        padding: 18px 18px 10px;
+
+        h2 {
+          font-size: 19px;
+        }
+      }
+
+      .login-form {
+        padding: 14px 18px;
+
+        .form-group {
+          margin-bottom: 18px;
+
+          .form-input {
+            --padding-start: 14px;
+            --padding-end: 14px;
+            font-size: 14px;
+          }
+        }
+
+        .sign-in-btn {
+          height: 48px;
+          font-size: 15px;
+        }
+      }
+
+      .social-buttons {
+        gap: 11px;
+        padding: 0 18px 18px;
+
+        .social-btn {
+          padding: 11px;
+          font-size: 13px;
+        }
+      }
+
+      .footer-text {
+        padding: 13px 18px 18px;
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+/* Large phones / Small tablets (426px - 768px) */
+@media (min-width: 426px) and (max-width: 768px) {
+  .login-content {
+    .hero-section {
+      padding: 45px 25px 35px;
+
+      .logo-container .logo-box {
+        width: 90px;
+        height: 90px;
+        font-size: 48px;
+      }
+
+      .app-title {
+        font-size: 40px;
+      }
+
+      .tagline {
+        font-size: 15px;
+      }
+    }
+
+    .form-card {
+      margin: -25px 20px 25px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+
+      .welcome-message {
+        padding: 25px 25px 12px;
+
+        h2 {
+          font-size: 22px;
+        }
+      }
+
+      .login-form {
+        padding: 18px 25px;
+
+        .form-group {
+          margin-bottom: 22px;
+
+          label {
+            font-size: 14px;
+          }
+
+          .form-input {
+            --padding-start: 18px;
+            --padding-end: 18px;
+            --padding-top: 14px;
+            --padding-bottom: 14px;
+            font-size: 16px;
+          }
+        }
+
+        .sign-in-btn {
+          height: 52px;
+          font-size: 17px;
+          margin: 15px 0 25px 0;
+        }
+      }
+
+      .divider-text {
+        font-size: 14px;
+        margin: 12px 0 18px;
+      }
+
+      .social-buttons {
+        gap: 15px;
+        padding: 0 25px 25px;
+
+        .social-btn {
+          padding: 14px;
+          font-size: 15px;
+        }
+      }
+
+      .footer-text {
+        padding: 18px 25px 25px;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+/* Tablets and larger (769px+) */
+@media (min-width: 769px) {
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+
+    .hero-section {
+      padding: 50px 30px 40px;
+    }
+
+    .form-card {
+      max-width: 480px;
+      margin: -30px auto 30px;
+    }
+  }
+}

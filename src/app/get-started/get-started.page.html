@@ -1,0 +1,45 @@
+<ion-content class="auth-shell">
+  <div class="auth-pair">
+    <section class="auth-card registration-card">
+      <h2>Registration</h2>
+      <p class="subtitle">A 6-digit demo code will be sent to your phone number.</p>
+
+      <div class="illustration-wrap" aria-label="Placeholder illustration">
+        <div class="illustration illustration-registration">
+          <span class="device"></span>
+          <span class="shield"></span>
+          <span class="person"></span>
+        </div>
+      </div>
+
+      <label class="field-label">Enter your phone number</label>
+
+      <div class="phone-input">
+        <select
+          class="prefix-box"
+          [value]="selectedPrefix"
+          (change)="selectedPrefix = $any($event.target).value; onPhoneNumberChange()"
+          aria-label="Country code"
+        >
+          <option *ngFor="let prefix of prefixes" [value]="prefix.value">
+            {{ prefix.label }}
+          </option>
+        </select>
+        <ion-input
+          type="tel"
+          inputmode="numeric"
+          class="phone-number-input"
+          [value]="phoneNumber"
+          (ionInput)="phoneNumber = $any($event.detail).value ?? ''; onPhoneNumberChange()"
+          maxlength="15"
+        ></ion-input>
+      </div>
+
+      <p class="status-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="button" class="primary-btn" [disabled]="isSendingCode" (click)="sendCode()">
+        {{ isSendingCode ? 'Sending...' : 'Send Code' }}
+      </button>
+    </section>
+  </div>
+</ion-content>

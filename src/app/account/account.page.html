@@ -1,0 +1,23 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goHome()">←</button>
+      <h1>Account</h1>
+    </header>
+
+    <section class="profile-card">
+      <div class="avatar">👤</div>
+      <div>
+        <h2>{{ profile.name }}</h2>
+        <p>{{ profile.email }}</p>
+      </div>
+    </section>
+
+    <div class="info-list">
+      <div class="info-item">Saved addresses</div>
+      <div class="info-item">Payment methods</div>
+      <div class="info-item">Notifications</div>
+      <div class="info-item">Settings</div>
+    </div>
+  </div>
+</ion-content>

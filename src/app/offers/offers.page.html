@@ -1,0 +1,16 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goHome()">←</button>
+      <h1>Offers</h1>
+    </header>
+
+    <div class="offers-list">
+      <article class="offer-card" *ngFor="let offer of offers">
+        <div class="offer-tag">Promo</div>
+        <h2>{{ offer.title }}</h2>
+        <p>{{ offer.text }}</p>
+      </article>
+    </div>
+  </div>
+</ion-content>

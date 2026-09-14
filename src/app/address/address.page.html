@@ -1,0 +1,30 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goHome()">←</button>
+      <h1>My Addresses</h1>
+    </header>
+
+    <div class="address-list">
+      <article class="address-card" *ngFor="let address of addresses; let i = index">
+        <div class="address-main">
+          <div class="address-meta">
+            <span class="address-label">{{ address.label }}</span>
+            <span class="primary-tag" *ngIf="address.primary">Primary</span>
+          </div>
+          <p>{{ address.detail }}</p>
+        </div>
+
+        <div class="address-actions">
+          <button type="button" class="text-btn" (click)="setPrimary(i)" *ngIf="!address.primary">Set as primary</button>
+          <button type="button" class="text-btn" (click)="editAddress(i)">Edit</button>
+          <button type="button" class="text-btn danger" (click)="deleteAddress(i)">Delete</button>
+        </div>
+      </article>
+    </div>
+
+    <ion-button expand="block" class="primary-action" (click)="addAddress()">
+      Add new address
+    </ion-button>
+  </div>
+</ion-content>

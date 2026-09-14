@@ -1,0 +1,18 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goHome()">←</button>
+      <h1>Orders</h1>
+    </header>
+
+    <div class="order-list">
+      <article class="order-card" *ngFor="let order of orders">
+        <div>
+          <p class="order-label">{{ order.title }}</p>
+          <span class="status">{{ order.status }}</span>
+        </div>
+        <strong>{{ order.amount }}</strong>
+      </article>
+    </div>
+  </div>
+</ion-content>

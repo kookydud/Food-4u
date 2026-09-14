@@ -1,0 +1,39 @@
+<ion-content class="auth-shell">
+  <div class="auth-pair">
+    <section class="auth-card verification-card">
+      <h2>Verification</h2>
+      <p class="subtitle">Enter the 6-digit code sent to {{ phoneNumberLabel }}</p>
+      <p class="status-message" *ngIf="demoCode">Demo mode: use code {{ demoCode }} to continue.</p>
+
+      <div class="illustration-wrap" aria-label="Placeholder illustration">
+        <div class="illustration illustration-verification">
+          <span class="device"></span>
+          <span class="shield"></span>
+          <span class="person"></span>
+        </div>
+      </div>
+
+      <label class="field-label">Verification code</label>
+
+      <ion-input
+        type="tel"
+        inputmode="numeric"
+        maxlength="6"
+        placeholder="123456"
+        class="code-input"
+        [value]="verificationCode"
+        (ionInput)="verificationCode = $any($event.detail).value ?? ''"
+      ></ion-input>
+
+      <p class="status-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="button" class="primary-btn" [disabled]="isVerifying" (click)="verifyCode()">
+        {{ isVerifying ? 'Verifying...' : 'Verify code' }}
+      </button>
+
+      <button type="button" class="resend-btn" [disabled]="isResending" (click)="resendCode()">
+        {{ isResending ? 'Sending...' : 'Resend code' }}
+      </button>
+    </section>
+  </div>
+</ion-content>

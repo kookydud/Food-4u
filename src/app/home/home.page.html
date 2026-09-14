@@ -1,20 +1,81 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="browse-page" [fullscreen]="true">
+  <div class="phone-shell">
+    <header class="topbar">
+      <button type="button" class="delivery-row" (click)="goToAddress()" aria-label="Manage delivery address">
+        <span class="pin">📍</span>
+        <span class="delivery-text">Deliver to</span>
+        <span class="location">Current Location</span>
+        <span class="chevron">▾</span>
+      </button>
+      <button type="button" class="bell-btn" aria-label="Notifications">🔔</button>
+    </header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <main class="content">
+      <h1 class="brand">Food <span>4U</span></h1>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <label class="search-bar" aria-label="Search restaurants">
+        <span class="search-icon">⌕</span>
+        <input
+          type="text"
+          [value]="searchTerm"
+          (input)="onSearchInput($event)"
+          placeholder="Search restaurants, dishes..."
+          aria-label="Search restaurants"
+        />
+      </label>
+
+      <div class="category-row">
+        <button
+          type="button"
+          class="category-pill"
+          *ngFor="let category of categories"
+          [class.active]="selectedCategory === category.label"
+          (click)="selectCategory(category.label)"
+        >
+          <img class="category-icon" [src]="category.iconImage" [alt]="category.label + ' category icon'" />
+          <span>{{ category.label }}</span>
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2>{{ selectedCategory === 'Offers' ? 'All Restaurants' : selectedCategory }}</h2>
+        <span>{{ filteredRestaurants.length }} places</span>
+      </div>
+
+      <section class="restaurant-list">
+        <article class="restaurant-card" *ngFor="let restaurant of filteredRestaurants">
+          <div class="restaurant-image" [ngClass]="restaurant.tone">
+            <img class="restaurant-photo" [src]="restaurant.image" [alt]="restaurant.name" />
+            <span class="badge">{{ restaurant.badge }}</span>
+          </div>
+
+          <div class="restaurant-details">
+            <div class="restaurant-row">
+              <h3>{{ restaurant.name }}</h3>
+              <span class="arrow">›</span>
+            </div>
+            <p>{{ restaurant.cuisine }}</p>
+            <div class="meta-row">
+              <span class="rating">★ {{ restaurant.rating }}</span>
+              <span class="time">◔ {{ restaurant.time }}</span>
+              <span class="fee">💵 {{ restaurant.fee }}</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button
+        type="button"
+        class="nav-item"
+        *ngFor="let item of navigation"
+        [class.active]="isTabActive(item.label)"
+        (click)="navigateTo(item.route, item.label)"
+      >
+        <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+        <span>{{ item.label }}</span>
+      </button>
+    </nav>
   </div>
 </ion-content>

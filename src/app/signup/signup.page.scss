@@ -1,0 +1,146 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.signup-content {
+  --background: linear-gradient(180deg, #fff3e8 0%, #fffaf5 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 20px 40px;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.logo-box {
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff9f43, #ff6b35);
+  border-radius: 22px;
+  box-shadow: 0 12px 24px rgba(255, 124, 55, 0.25);
+  font-size: 2.2rem;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.highlight {
+  color: #ff6b35;
+}
+
+.tagline {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 26px;
+  padding: 20px 20px 12px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background: #f3f4f6;
+  border-radius: 14px;
+  padding: 6px;
+  margin-bottom: 22px;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #fff;
+  color: #ff6b35;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.signup-form {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-input {
+  --background: #f9fafb;
+  --border-radius: 14px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --min-height: 52px;
+  border: 1px solid #e5e7eb;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.show-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #ff6b35;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sign-up-btn {
+  --background: linear-gradient(135deg, #ff9f43, #ff6b35);
+  --border-radius: 14px;
+  --box-shadow: 0 10px 20px rgba(255, 107, 53, 0.25);
+  --color: white;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.footer-text {
+  margin-top: 18px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.footer-text a {
+  color: #ff6b35;
+  text-decoration: none;
+  font-weight: 700;
+}
