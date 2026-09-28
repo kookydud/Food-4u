@@ -1,0 +1,63 @@
+<ion-content class="vouchers-page" [fullscreen]="true">
+  <div class="voucher-shell" *ngIf="restaurant">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goBack()"><</button>
+      <span class="page-text">Vouchers</span>
+    </header>
+
+    <main class="content">
+      <section class="voucher-summary">
+        <p>For {{ restaurant.name }}</p>
+        <h1>{{ formatCurrency(subtotal) }}</h1>
+        <span>Only vouchers valid for this order are selectable.</span>
+      </section>
+
+      <section class="voucher-group">
+        <div class="group-head">
+          <h2>Can Use</h2>
+          <span>{{ applicableVouchers.length }}</span>
+        </div>
+
+        <article class="voucher-card usable" *ngFor="let voucherState of applicableVouchers">
+          <div class="voucher-copy">
+            <div class="voucher-row">
+              <h3>{{ voucherState.voucher.code }}</h3>
+              <span class="active-pill" *ngIf="selectedVoucherId === voucherState.voucher.id">Selected</span>
+            </div>
+            <p>{{ voucherState.voucher.title }}</p>
+            <small>{{ voucherState.voucher.description }}</small>
+          </div>
+
+          <div class="voucher-actions">
+            <strong>-{{ formatCurrency(voucherState.discountAmount) }}</strong>
+            <button type="button" class="select-btn" (click)="chooseVoucher(voucherState.voucher.id)">
+              {{ selectedVoucherId === voucherState.voucher.id ? 'Selected' : 'Use' }}
+            </button>
+          </div>
+        </article>
+
+        <button type="button" class="clear-btn" (click)="clearVoucher()">No voucher</button>
+      </section>
+
+      <section class="voucher-group">
+        <div class="group-head">
+          <h2>Can't Use</h2>
+          <span>{{ unavailableVouchers.length }}</span>
+        </div>
+
+        <article class="voucher-card blocked" *ngFor="let voucherState of unavailableVouchers">
+          <div class="voucher-copy">
+            <h3>{{ voucherState.voucher.code }}</h3>
+            <p>{{ voucherState.voucher.title }}</p>
+            <small>{{ voucherState.reason }}</small>
+          </div>
+
+          <div class="voucher-actions">
+            <strong>-{{ formatCurrency(voucherState.discountAmount) }}</strong>
+            <button type="button" class="select-btn" disabled>Unavailable</button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</ion-content>

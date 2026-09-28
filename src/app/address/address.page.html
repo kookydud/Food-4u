@@ -2,29 +2,47 @@
   <div class="page-shell">
     <header class="page-header">
       <button type="button" class="back-btn" (click)="goHome()">←</button>
-      <h1>My Addresses</h1>
+      <h1>Saved Addresses</h1>
     </header>
 
-    <div class="address-list">
-      <article class="address-card" *ngFor="let address of addresses; let i = index">
-        <div class="address-main">
-          <div class="address-meta">
-            <span class="address-label">{{ address.label }}</span>
-            <span class="primary-tag" *ngIf="address.primary">Primary</span>
+    <section class="address-list">
+      <article class="address-row" *ngFor="let address of addresses" (click)="setPrimary(address.id)">
+        <div class="address-radio" [class.active]="address.primary"></div>
+
+        <div class="address-copy">
+          <div class="address-title-row">
+            <h2>{{ address.label }}</h2>
+            <span class="primary-tag" *ngIf="address.primary">Selected</span>
           </div>
-          <p>{{ address.detail }}</p>
+          <p>{{ address.addressLine }}</p>
+          <small *ngIf="address.details">{{ address.details }}</small>
         </div>
 
-        <div class="address-actions">
-          <button type="button" class="text-btn" (click)="setPrimary(i)" *ngIf="!address.primary">Set as primary</button>
-          <button type="button" class="text-btn" (click)="editAddress(i)">Edit</button>
-          <button type="button" class="text-btn danger" (click)="deleteAddress(i)">Delete</button>
+        <div class="address-tools">
+          <button type="button" class="tool-btn" (click)="$event.stopPropagation(); editAddress(address)">Edit</button>
+          <button type="button" class="tool-btn danger" (click)="$event.stopPropagation(); deleteAddress(address.id)">Delete</button>
         </div>
       </article>
-    </div>
+    </section>
 
-    <ion-button expand="block" class="primary-action" (click)="addAddress()">
-      Add new address
-    </ion-button>
+    <section class="address-form-card">
+      <div class="form-head">
+        <h2>{{ editingAddressId ? 'Edit Address' : 'Add Address' }}</h2>
+        <button type="button" class="plain-btn" *ngIf="editingAddressId" (click)="cancelEdit()">Cancel</button>
+      </div>
+
+      <label class="field-label" for="label">Label</label>
+      <input id="label" type="text" [(ngModel)]="label" placeholder="Home, Office, Apartment" />
+
+      <label class="field-label" for="address-line">Address</label>
+      <textarea id="address-line" [(ngModel)]="addressLine" maxlength="180" placeholder="Enter full street address"></textarea>
+
+      <label class="field-label" for="address-details">Details</label>
+      <input id="address-details" type="text" [(ngModel)]="details" placeholder="Gate color, floor, landmark" />
+
+      <button type="button" class="save-btn" (click)="saveAddress()">
+        {{ editingAddressId ? 'Save Changes' : 'Add Address' }}
+      </button>
+    </section>
   </div>
 </ion-content>

@@ -1,0 +1,70 @@
+<ion-content class="restaurant-cart-page" [fullscreen]="true">
+  <div class="cart-shell" *ngIf="restaurant">
+    <header class="cart-top">
+      <button type="button" class="back-btn" (click)="goBackToRestaurant()">←</button>
+      <h1>{{ restaurant.name }} Cart</h1>
+    </header>
+
+    <section class="meal-list-section">
+      <div class="section-head">
+        <h2>Meal Orders</h2>
+        <span>{{ cartCount }} item(s)</span>
+      </div>
+
+      <div class="meal-list" *ngIf="cartItems.length; else emptyCart">
+        <article class="meal-order-card" *ngFor="let item of cartItems" (click)="editCartItem(item)">
+          <div class="meal-order-copy">
+            <h3>{{ item.mealName }}</h3>
+            <p>{{ item.size }} · {{ item.spicy ? 'Spicy' : 'Not spicy' }}</p>
+            <small>{{ item.quantity }} x {{ item.mealPrice }}</small>
+          </div>
+
+          <div class="meal-order-actions">
+            <strong>{{ getItemTotal(item) }}</strong>
+            <button type="button" class="remove-btn" (click)="$event.stopPropagation(); removeItem(item)">×</button>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #emptyCart>
+        <div class="empty-cart">No meals in cart yet.</div>
+      </ng-template>
+
+      <button type="button" class="edit-btn" (click)="editInRestaurant()">Edit in Restaurant</button>
+    </section>
+
+    <section class="delivery-section">
+      <div class="delivery-head">
+        <h2>Delivery Details</h2>
+        <button type="button" class="manage-address-btn" (click)="openAddressPage()">Manage</button>
+      </div>
+
+      <label class="field-label" for="delivery-address">Address</label>
+      <div id="delivery-address" class="address-preview" (click)="openAddressPage()">
+        <strong *ngIf="selectedAddress as addressItem; else noAddress">{{ addressItem.label }}</strong>
+        <ng-template #noAddress>
+          <strong>No saved address</strong>
+        </ng-template>
+
+        <p>{{ address || 'Tap Manage to add or select an address.' }}</p>
+      </div>
+
+      <label class="field-label" for="delivery-note">Location Note</label>
+      <textarea
+        id="delivery-note"
+        [(ngModel)]="locationNote"
+        placeholder="Landmark, floor, gate color, etc."
+        maxlength="180"
+        (input)="saveDeliveryDraft()"
+      ></textarea>
+    </section>
+  </div>
+
+  <div class="cart-footer" *ngIf="restaurant">
+    <div class="total-row">
+      <span>Total</span>
+      <strong>{{ cartTotal }}</strong>
+    </div>
+    <button type="button" class="place-order-btn" [disabled]="!cartItems.length" (click)="placeOrder()">Checkout</button>
+  </div>
+</ion-content>

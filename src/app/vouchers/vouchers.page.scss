@@ -1,0 +1,162 @@
+.vouchers-page {
+  --background: #f4f4f7;
+}
+
+.voucher-shell {
+  min-height: 100dvh;
+  padding-bottom: 28px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 14px 10px;
+  background: #f4f4f7;
+}
+
+.back-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 1.05rem;
+}
+
+.page-text {
+  color: #000000;
+  font-weight: 700;
+  opacity: 0.8;
+  padding-left: 5px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 0;
+}
+
+.voucher-summary,
+.voucher-group {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.voucher-summary p,
+.voucher-summary span,
+.group-head span,
+.voucher-copy small {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.voucher-summary h1,
+.group-head h2,
+.voucher-copy h3,
+.voucher-actions strong {
+  margin: 0;
+  color: #111827;
+}
+
+.voucher-summary h1 {
+  font-size: 1.6rem;
+  margin: 6px 0 2px;
+}
+
+.group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.voucher-card {
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.voucher-card.usable {
+  background: #f8fafc;
+}
+
+.voucher-card.blocked {
+  background: #fcfcfd;
+  opacity: 0.9;
+}
+
+.voucher-copy {
+  min-width: 0;
+}
+
+.voucher-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.active-pill {
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.voucher-copy p {
+  margin: 0;
+  color: #111827;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.voucher-copy small {
+  display: block;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.voucher-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.select-btn,
+.clear-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.select-btn {
+  background: #111827;
+  color: #ffffff;
+}
+
+.select-btn:disabled {
+  opacity: 0.5;
+}
+
+.clear-btn {
+  width: 100%;
+  background: #eef2ff;
+  color: #3730a3;
+}

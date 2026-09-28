@@ -22,16 +22,16 @@
     </div>
 
     <div class="auth-form-panel">
-      <form *ngIf="!isSignUp" class="login-form">
+      <form *ngIf="!isSignUp" class="login-form" autocomplete="off">
         <div class="form-group">
           <label>Email</label>
-          <ion-input type="email" placeholder="you@email.com" class="form-input"></ion-input>
+          <ion-input type="email" placeholder="you@email.com" class="form-input" [(ngModel)]="signInEmail" name="signInEmail" autocomplete="off"></ion-input>
         </div>
 
         <div class="form-group">
           <label>Password</label>
           <div class="password-wrapper">
-            <ion-input type="password" placeholder="Min. 6 characters" class="form-input"></ion-input>
+            <ion-input type="password" placeholder="Min. 6 characters" class="form-input" [(ngModel)]="signInPassword" name="signInPassword" autocomplete="new-password"></ion-input>
             <button type="button" class="show-password">Show</button>
           </div>
         </div>
@@ -40,39 +40,41 @@
           <a href="#">Forgot password?</a>
         </div>
 
-        <ion-button type="button" expand="block" class="sign-in-btn" (click)="goToHome()">
+        <ion-button type="button" expand="block" class="sign-in-btn" (click)="signIn()">
           Sign In →
         </ion-button>
       </form>
 
-      <form *ngIf="isSignUp" class="signup-form">
+      <form *ngIf="isSignUp" class="signup-form" autocomplete="off">
         <div class="form-group">
           <label>Full Name</label>
-          <ion-input type="text" placeholder="Your name" class="form-input"></ion-input>
+          <ion-input type="text" placeholder="Your name" class="form-input" [(ngModel)]="signUpFullName" name="signUpFullName" autocomplete="off"></ion-input>
         </div>
 
         <div class="form-group">
           <label>Email</label>
-          <ion-input type="email" placeholder="you@email.com" class="form-input"></ion-input>
+          <ion-input type="email" placeholder="you@email.com" class="form-input" [(ngModel)]="signUpEmail" name="signUpEmail" autocomplete="off"></ion-input>
         </div>
 
         <div class="form-group">
           <label>Password</label>
           <div class="password-wrapper">
-            <ion-input type="password" placeholder="Min. 6 characters" class="form-input"></ion-input>
+            <ion-input type="password" placeholder="Min. 6 characters" class="form-input" [(ngModel)]="signUpPassword" name="signUpPassword" autocomplete="new-password"></ion-input>
             <button type="button" class="show-password">Show</button>
           </div>
         </div>
 
         <div class="form-group">
           <label>Confirm Password</label>
-          <ion-input type="password" placeholder="Re-enter your password" class="form-input"></ion-input>
+          <ion-input type="password" placeholder="Re-enter your password" class="form-input" [(ngModel)]="signUpConfirmPassword" name="signUpConfirmPassword" autocomplete="new-password"></ion-input>
         </div>
 
-        <ion-button type="button" expand="block" class="sign-in-btn" (click)="goToGetStarted()">
+        <ion-button type="button" expand="block" class="sign-in-btn" (click)="signUp()">
           Create account →
         </ion-button>
       </form>
+
+      <p class="auth-error" *ngIf="errorMessage">{{ errorMessage }}</p>
     </div>
 
     <div class="divider-text">or continue with</div>

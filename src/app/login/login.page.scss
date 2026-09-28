@@ -129,6 +129,21 @@
     .auth-form-panel {
       position: relative;
       overflow: hidden;
+
+      .auth-error,
+      .auth-info {
+        margin: 0 20px 16px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .auth-error {
+        color: #b42318;
+      }
+
+      .auth-info {
+        color: #1d6f42;
+      }
     }
 
     .login-form,

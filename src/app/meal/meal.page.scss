@@ -1,0 +1,168 @@
+.meal-page {
+  --background: #f4f4f7;
+}
+
+.meal-shell {
+  padding: 16px 14px 110px;
+}
+
+.meal-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 1.1rem;
+}
+
+.meal-top h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.25rem;
+}
+
+.meal-card {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 10px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+}
+
+.meal-card img {
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.meal-copy h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.03rem;
+}
+
+.meal-copy p {
+  margin: 4px 0;
+  color: #6b7280;
+  font-size: 0.83rem;
+}
+
+.meal-copy small {
+  color: #4b5563;
+  font-size: 0.78rem;
+}
+
+.option-group {
+  margin-top: 14px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.option-group h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.size-row,
+.toggle-row {
+  display: flex;
+  gap: 8px;
+}
+
+.size-btn,
+.toggle-btn {
+  border: none;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #374151;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.size-btn.active,
+.toggle-btn.active {
+  background: #111827;
+  color: #ffffff;
+}
+
+.price-preview {
+  margin: 10px 0 0;
+  color: #6d28d9;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.qty-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 999px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.qty-row span {
+  min-width: 16px;
+  text-align: center;
+  font-weight: 700;
+  color: #111827;
+}
+
+.option-group textarea {
+  width: 100%;
+  min-height: 72px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 8px 10px;
+  resize: none;
+  font: inherit;
+  color: #111827;
+}
+
+.option-group textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
+}
+
+.bottom-cta {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 14px;
+  z-index: 8;
+}
+
+.add-cart-btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.22);
+}

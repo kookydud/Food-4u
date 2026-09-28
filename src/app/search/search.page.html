@@ -1,20 +1,168 @@
-<ion-content class="page-content">
-  <div class="page-shell">
-    <header class="page-header">
-      <button type="button" class="back-btn" (click)="goHome()">←</button>
-      <h1>Search</h1>
+<ion-content class="browse-page" [fullscreen]="true">
+  <div class="phone-shell">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goToAddress()"><</button>
+      <span class="page-text">Search</span>
     </header>
+    
+    <main class="content">
+  
+      <label class="search-bar" aria-label="Search restaurants">
+        <span class="search-icon">⌕</span>
+        <input
+          #searchInput
+          type="text"
+          [value]="searchTerm"
+          (input)="onSearchInput($event)"
+          (keydown.enter)="onSearchEnter($event)"
+          (blur)="onSearchBlur()"
+          placeholder="Search restaurants, dishes..."
+          aria-label="Search restaurants"
+        />
+      </label>
 
-    <div class="search-box">
-      <span>⌕</span>
-      <span>Search restaurants, dishes, or cuisines</span>
+      <section class="searched-meals" *ngIf="hasActiveSearch">
+        <p>Searched meal</p>
+        <section class="searched-meal-list" *ngIf="searchedMealsPreview.length; else noMatchedMeal">
+          <button
+            type="button"
+            class="searched-meal-card"
+            *ngFor="let meal of searchedMealsPreview"
+            (click)="openMealRestaurant(meal.restaurantId, meal.mealName)"
+          >
+            <img class="searched-meal-image" [src]="meal.mealImage" [alt]="meal.mealName" />
+            <span class="searched-meal-copy">
+              <strong>{{ meal.mealName }}</strong>
+              <small>{{ meal.restaurantName }}</small>
+            </span>
+            <em>{{ meal.mealPrice }}</em>
+          </button>
+        </section>
+
+        <ng-template #noMatchedMeal>
+          <div class="no-match">No matching meal.</div>
+        </ng-template>
+      </section>
+
+      <section class="recent-searches" *ngIf="searchHistory.length && !hasActiveSearch">
+        <div class="recent-searches-head">
+          <p>Recent searches</p>
+          <button type="button" class="clear-history-btn" (click)="clearHistorySearches()">Clear all</button>
+        </div>
+
+        <div class="search-history-row">
+          <div class="history-chip" *ngFor="let term of searchHistory.slice(0, 5)">
+            <button type="button" class="history-term-btn" (click)="useHistorySearch(term)">{{ term }}</button>
+            <button type="button" class="history-remove-btn" (click)="removeHistorySearch(term)" [attr.aria-label]="'Delete ' + term">×</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="recent-orders" *ngIf="recentOrders.length">
+        <div class="section-header compact">
+          <h2>Recent Orders</h2>
+          <span>Last 3</span>
+        </div>
+
+        <div class="order-list">
+          <article class="order-card" *ngFor="let order of recentOrders">
+            <div class="order-copy">
+              <h3>{{ order.title }}</h3>
+              <p>{{ order.status }}</p>
+            </div>
+            <strong>{{ order.amount }}</strong>
+          </article>
+        </div>
+      </section>
+
+      <div class="category-row">
+        <button
+          type="button"
+          class="category-pill"
+          *ngFor="let category of categories"
+          [class.offer-category]="category.label === 'Offers'"
+          [class.active]="selectedCategory === category.label"
+          (click)="selectCategory(category.label)"
+        >
+          <span class="category-image-wrap">
+            <img class="category-icon" [src]="category.iconImage" [alt]="category.label + ' category icon'" />
+          </span>
+          <span class="category-label">{{ category.label }}</span>
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2>{{ selectedCategory === 'Offers' ? 'All Restaurants' : selectedCategory }}</h2>
+        <span>{{ filteredRestaurantResults.length }} places</span>
+      </div>
+
+      <p class="order-notice" *ngIf="orderNotice">{{ orderNotice }}</p>
+
+      <section class="restaurant-list" *ngIf="filteredRestaurantResults.length; else noResults">
+      <article class="restaurant-card" *ngFor="let result of filteredRestaurantResults" (click)="openRestaurant(result.restaurant.id)">
+        <div class="restaurant-image" [ngClass]="result.restaurant.tone">
+          <img class="restaurant-photo" [src]="result.restaurant.image" [alt]="result.restaurant.name" />
+          <span class="badge">{{ result.restaurant.badge }}</span>
+        </div>
+
+        <div class="restaurant-details">
+          <div class="restaurant-row">
+            <h3>{{ result.restaurant.name }}</h3>
+            <button type="button" class="arrow" (click)="$event.stopPropagation(); orderFromRestaurant(result.restaurant)">Order</button>
+          </div>
+          <p>{{ result.restaurant.cuisine }}</p>
+          <div class="meta-row">
+            <span class="rating">★ {{ result.restaurant.rating }}</span>
+            <span class="time">◔ {{ result.restaurant.time }}</span>
+            <span class="fee"> {{ result.restaurant.fee }}</span>
+          </div>
+
+          <div class="matched-meals" *ngIf="searchTerm.trim() && result.matchedMeals.length">
+            <p class="matched-meals-label">Meals</p>
+            <div class="meal-chip-wrap">
+              <span class="meal-chip" *ngFor="let meal of result.matchedMeals">{{ meal.name }}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <ng-template #noResults>
+      <div class="empty-state">No restaurants found.</div>
+    </ng-template>
+
+    <div class="section-header meals-header" *ngIf="homeLikeMeals.length">
+      <h2>Meals</h2>
+      <span>{{ homeLikeMeals.length }} items</span>
     </div>
 
-    <div class="card-grid">
-      <div class="info-card">Pizza</div>
-      <div class="info-card">Burgers</div>
-      <div class="info-card">Sushi</div>
-      <div class="info-card">Healthy</div>
-    </div>
+    <section class="meal-row" *ngIf="homeLikeMeals.length">
+      <button
+        type="button"
+        class="meal-pill"
+        *ngFor="let meal of homeLikeMeals"
+        (click)="openMealRestaurant(meal.restaurantId, meal.mealName)"
+      >
+        <img class="meal-pill-image" [src]="meal.mealImage" [alt]="meal.mealName" />
+        <span class="meal-pill-copy">
+          <strong>{{ meal.mealName }}</strong>
+          <small>{{ meal.restaurantName }} · {{ meal.mealPrice }}</small>
+        </span>
+      </button>
+    </section>
+    </main>
   </div>
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button
+      type="button"
+      class="nav-item"
+      *ngFor="let item of navigation"
+      [class.active]="isTabActive(item.label)"
+      (click)="navigateTo(item.route)"
+    >
+      <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+      <span>{{ item.label }}</span>
+    </button>
+    </nav>
 </ion-content>
+

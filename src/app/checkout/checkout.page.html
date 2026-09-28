@@ -1,0 +1,102 @@
+<ion-content class="checkout-page" [fullscreen]="true">
+  <div class="checkout-shell" *ngIf="restaurant">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goBack()"><</button>
+      <span class="page-text">Checkout</span>
+    </header>
+
+    <main class="content">
+      <section class="summary-card">
+        <div class="summary-head">
+          <div>
+            <p>Ordering from</p>
+            <h1>{{ restaurant.name }}</h1>
+          </div>
+          <strong>{{ formatCurrency(subtotal) }}</strong>
+        </div>
+
+        <div class="item-list">
+          <article class="item-row" *ngFor="let item of cartItems">
+            <div>
+              <h3>{{ item.mealName }}</h3>
+              <p>{{ item.size }} · {{ item.spicy ? 'Spicy' : 'Not spicy' }} · {{ item.quantity }} pcs</p>
+            </div>
+            <strong>{{ getItemTotal(item) }}</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="payment-card">
+        <div class="card-head">
+          <h2>Mode of Payment</h2>
+          <span>Choose one</span>
+        </div>
+
+        <div class="payment-list">
+          <button
+            type="button"
+            class="payment-btn"
+            *ngFor="let method of paymentMethods"
+            [class.active]="selectedPaymentMethod === method"
+            (click)="selectPaymentMethod(method)"
+          >
+            {{ method }}
+          </button>
+        </div>
+      </section>
+
+      <section class="voucher-card">
+        <div class="card-head">
+          <h2>Voucher</h2>
+          <button type="button" class="link-btn" (click)="openVoucherPage()">Choose voucher</button>
+        </div>
+
+        <div class="voucher-selected">
+          <strong>{{ selectedVoucherLabel }}</strong>
+          <p>{{ selectedVoucherDescription }}</p>
+        </div>
+      </section>
+
+      <section class="delivery-card">
+        <div class="card-head">
+          <h2>Delivery Details</h2>
+          <button type="button" class="link-btn" (click)="openAddressPage()">Edit</button>
+        </div>
+
+        <div class="address-block">
+          <strong>{{ selectedAddress?.label || 'No saved address' }}</strong>
+          <p>{{ deliveryAddress || 'Select or add an address.' }}</p>
+        </div>
+
+        <label class="field-label" for="delivery-note">Location Note</label>
+        <textarea
+          id="delivery-note"
+          [(ngModel)]="deliveryNote"
+          maxlength="180"
+          placeholder="Landmark, gate color, floor, etc."
+          (input)="saveDraft()"
+        ></textarea>
+      </section>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </main>
+
+    <footer class="checkout-footer">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <strong>{{ formatCurrency(subtotal) }}</strong>
+      </div>
+      <div class="total-row" *ngIf="discountAmount > 0">
+        <span>Voucher discount</span>
+        <strong>-{{ formatCurrency(discountAmount) }}</strong>
+      </div>
+      <div class="total-row grand-total">
+        <span>Total</span>
+        <strong>{{ formatCurrency(total) }}</strong>
+      </div>
+      <button type="button" class="place-order-btn" [disabled]="!cartItems.length" (click)="placeOrder()">
+        Place Order
+      </button>
+    </footer>
+  </div>
+</ion-content>

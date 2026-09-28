@@ -1,30 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
+import { LocalDataService } from '../services/local-data.service';
+import { Restaurant, RestaurantMeal, RestaurantService } from '../services/restaurant.service';
+import { Category, foodCategories, navigationItems } from '../shared/app-data';
 
-type Category = {
-  label: string;
-  iconImage: string;
+type HomeMeal = {
+  restaurantId: string;
+  restaurantName: string;
+  mealName: string;
+  mealPrice: string;
+  mealImage: string;
 };
-
-type Restaurant = {
-  name: string;
-  cuisine: string;
-  rating: number;
-  time: string;
-  fee: string;
-  badge: string;
-  tone: string;
-  image: string;
-  category: string;
-};
-
-const createPlaceholderImage = (label: string, width = 220, height = 150) =>
-  `https://placehold.co/${width}x${height}/F3E8FF/6D28D9?text=${encodeURIComponent(label)}`;
-
-const createCategoryIcon = (label: string) =>
-  `https://placehold.co/64x64/F3E8FF/6D28D9?text=${encodeURIComponent(label.slice(0, 3).toUpperCase())}`;
 
 @Component({
   selector: 'app-home',
@@ -32,84 +20,37 @@ const createCategoryIcon = (label: string) =>
   styleUrls: ['home.page.scss'],
   imports: [CommonModule, IonContent],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   selectedCategory = 'Offers';
   searchTerm = '';
+  orderNotice = '';
 
-  categories: Category[] = [
-    { label: 'Offers', iconImage: createCategoryIcon('Offers') },
-    { label: 'Pizza', iconImage: createCategoryIcon('Pizza') },
-    { label: 'Burgers', iconImage: createCategoryIcon('Burgers') },
-    { label: 'Sushi', iconImage: createCategoryIcon('Sushi') },
-  ];
+  categories: Category[] = foodCategories;
 
-  restaurants: Restaurant[] = [
-    {
-      name: 'Bella Napoli',
-      cuisine: 'Italian · Pizza',
-      rating: 4.8,
-      time: '25–35 min',
-      fee: '$1.99',
-      badge: 'Popular',
-      tone: 'pasta',
-      image: createPlaceholderImage('Bella Napoli'),
-      category: 'Pizza',
-    },
-    {
-      name: 'Sakura Garden',
-      cuisine: 'Japanese · Sushi',
-      rating: 4.9,
-      time: '30–40 min',
-      fee: 'Free',
-      badge: 'New',
-      tone: 'sushi',
-      image: createPlaceholderImage('Sakura Garden'),
-      category: 'Sushi',
-    },
-    {
-      name: 'The Burger Lab',
-      cuisine: 'American · Burgers',
-      rating: 4.7,
-      time: '20–30 min',
-      fee: '$0.99',
-      badge: 'Top Rated',
-      tone: 'burger',
-      image: createPlaceholderImage('Burger Lab'),
-      category: 'Burgers',
-    },
-    {
-      name: 'Spice Route',
-      cuisine: 'Indian · Curry',
-      rating: 4.6,
-      time: '25–35 min',
-      fee: '$2.99',
-      badge: 'Trending',
-      tone: 'curry',
-      image: createPlaceholderImage('Spice Route'),
-      category: 'Pizza',
-    },
-  ];
+  restaurants: Restaurant[] = this.restaurantService.getRestaurants();
 
-  navigation = [
-    { label: 'Home', iconImage: createCategoryIcon('Home'), route: '/home' },
-    { label: 'Search', iconImage: createCategoryIcon('Search'), route: '/search' },
-    { label: 'Orders', iconImage: createCategoryIcon('Orders'), route: '/orders' },
-    { label: 'Offers', iconImage: createCategoryIcon('Offers'), route: '/offers' },
-    { label: 'Account', iconImage: createCategoryIcon('Account'), route: '/account' },
-  ];
+  navigation = navigationItems;
 
-  currentTab = 'Home';
+  constructor(
+    private readonly router: Router,
+    private readonly restaurantService: RestaurantService,
+    private readonly localDataService: LocalDataService,
+  ) {}
 
-  constructor(private readonly router: Router) {}
+  ngOnInit(): void {
+    if (!this.localDataService.isSignedIn()) {
+      this.router.navigateByUrl('/login');
+      return;
+    }
+
+    const saved = this.localDataService.getSearchStateForCurrentUser();
+    this.searchTerm = '';
+    this.selectedCategory = saved.selectedCategory;
+  }
 
   get filteredRestaurants() {
+    const categoryFiltered = this.restaurantService.getRestaurantsByCategory(this.selectedCategory);
     const normalizedSearch = this.searchTerm.trim().toLowerCase();
-
-    const categoryFiltered = this.selectedCategory === 'Offers'
-      ? this.restaurants
-      : this.restaurants.filter(
-          (restaurant) => restaurant.category.toLowerCase() === this.selectedCategory.toLowerCase(),
-        );
 
     if (!normalizedSearch) {
       return categoryFiltered;
@@ -121,17 +62,54 @@ export class HomePage {
     });
   }
 
+  get homeMeals(): HomeMeal[] {
+    const restaurants = this.selectedCategory === 'Offers'
+      ? this.restaurantService.getRestaurants()
+      : this.restaurantService.getRestaurantsByCategory(this.selectedCategory);
+
+    return restaurants.flatMap((restaurant) => {
+      const meals = this.restaurantService.getMealsByRestaurant(restaurant.id).slice(0, 2);
+
+      return meals.map((meal) => ({
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
+        mealName: meal.name,
+        mealPrice: meal.price,
+        mealImage: meal.image,
+      }));
+    });
+  }
+
   selectCategory(category: string): void {
     this.selectedCategory = category;
+    this.localDataService.saveSearchStateForCurrentUser(this.searchTerm, this.selectedCategory);
   }
 
   onSearchInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchTerm = input.value;
+    this.localDataService.saveSearchStateForCurrentUser(this.searchTerm, this.selectedCategory);
   }
 
-  navigateTo(route: string, label: string): void {
-    this.currentTab = label;
+  orderFromRestaurant(restaurant: Restaurant): void {
+    this.localDataService.saveRestaurantVisit(restaurant.name);
+    this.router.navigateByUrl(`/restaurant/${restaurant.id}`);
+  }
+
+  openMealRestaurant(restaurantId: string): void {
+    this.openRestaurant(restaurantId);
+  }
+
+  openRestaurant(restaurantId: string): void {
+    this.router.navigateByUrl(`/restaurant/${restaurantId}`);
+  }
+
+  navigateTo(route: string): void {
+    if (route === '/search') {
+      this.goToSearch();
+      return;
+    }
+
     this.router.navigateByUrl(route);
   }
 
@@ -139,7 +117,29 @@ export class HomePage {
     this.router.navigateByUrl('/address');
   }
 
+  goToSearch(): void {
+    this.router.navigateByUrl('/search', {
+      state: {
+        focusSearch: true,
+        searchTerm: this.searchTerm,
+      },
+    });
+  }
+
   isTabActive(label: string): boolean {
-    return this.currentTab === label;
+    const routeMap: Record<string, string> = {
+      Home: '/home',
+      Search: '/search',
+      Orders: '/orders',
+      Offers: '/offers',
+      Account: '/account',
+    };
+
+    return this.router.url.startsWith(routeMap[label] ?? '');
+  }
+
+  private extractAmountFromCuisine(cuisine: string): string {
+    const firstSegment = cuisine.split('·')[0]?.trim();
+    return firstSegment || '$0.00';
   }
 }

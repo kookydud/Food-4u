@@ -1,0 +1,69 @@
+<ion-content class="cart-page" [fullscreen]="true">
+  <div class="page-shell">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goHome()"><</button>
+      <span class="page-text">Active Carts</span>
+    </header>
+
+    <main class="content">
+      <div class="section-header">
+        <h1>Active Carts</h1>
+        <span>{{ totalActiveCarts }} groups</span>
+      </div>
+
+      <section *ngIf="cartGroups.length; else noCarts" class="cart-group-list">
+        <article
+          class="cart-group-card"
+          *ngFor="let group of cartGroups"
+          (click)="openCartGroup(group.restaurantId)"
+        >
+          <div class="group-head">
+            <div class="group-head-main">
+              <img class="group-restaurant-image" [src]="group.restaurantImage" [alt]="group.restaurantName" />
+              <div>
+                <h3>{{ group.restaurantName }}</h3>
+                <p>{{ group.items.length }} item{{ group.items.length > 1 ? 's' : '' }}</p>
+              </div>
+            </div>
+            <button type="button" class="edit-btn" (click)="$event.stopPropagation(); openCartGroup(group.restaurantId)">
+              Edit
+            </button>
+          </div>
+
+          <div class="group-items">
+            <div class="group-item" *ngFor="let item of group.items">
+              <span>{{ getItemLabel(item) }}</span>
+              <strong>{{ item.mealPrice }}</strong>
+            </div>
+          </div>
+
+          <div class="group-footer">
+            <span>Total</span>
+            <strong>{{ group.totalAmount }}</strong>
+          </div>
+        </article>
+      </section>
+
+      <ng-template #noCarts>
+        <section class="empty-state" aria-live="polite">
+          <div class="empty-icon" aria-hidden="true">🛒</div>
+          <h2>No active carts</h2>
+          <p>Only carts with meals are shown here.</p>
+        </section>
+      </ng-template>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button
+        type="button"
+        class="nav-item"
+        *ngFor="let item of navigation"
+        [class.active]="isTabActive(item.label)"
+        (click)="navigateTo(item.route)"
+      >
+        <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+        <span>{{ item.label }}</span>
+      </button>
+    </nav>
+  </div>
+</ion-content>

@@ -35,3 +35,69 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -10px 24px rgba(25, 25, 25, 0.08);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  padding: 8px 6px 10px;
+  z-index: 10;
+  padding-bottom: 25px;
+}
+
+.nav-item {
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 2px;
+  min-height: 56px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.nav-item.active {
+  color: #6c2bd9;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 10px 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+  height: 85px;
+  padding-top: 30px;
+}
+

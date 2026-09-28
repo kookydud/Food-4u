@@ -7,6 +7,11 @@ export class PhoneAuthService {
   private pendingPhoneNumber = '';
   private demoCode = '123456';
 
+  resetFlow(): void {
+    this.pendingPhoneNumber = '';
+    this.demoCode = '123456';
+  }
+
   initializeRecaptcha(): null {
     return null;
   }

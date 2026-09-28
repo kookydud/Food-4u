@@ -1,18 +1,119 @@
-<ion-content class="page-content">
-  <div class="page-shell">
-    <header class="page-header">
-      <button type="button" class="back-btn" (click)="goHome()">←</button>
-      <h1>Orders</h1>
+<ion-content class="orders-page" [fullscreen]="true">
+  <div class="phone-shell">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goHome()"><</button>
+      <span class="page-text">Orders</span>
     </header>
 
-    <div class="order-list">
-      <article class="order-card" *ngFor="let order of orders">
-        <div>
-          <p class="order-label">{{ order.title }}</p>
-          <span class="status">{{ order.status }}</span>
+    <main class="content">
+      <div class="title-row" *ngIf="pastOrderGroups.length || currentOrderGroups.length">
+        <h1>Order History</h1>
+        <span>Last 5 groups</span>
+      </div>
+
+      <p class="order-notice" *ngIf="orderNotice">{{ orderNotice }}</p>
+
+      <section *ngIf="orders.length; else noOrders">
+        <div class="section-header">
+          <h2>Current Orders</h2>
+          <span>{{ currentOrderGroups.length }} groups</span>
         </div>
-        <strong>{{ order.amount }}</strong>
-      </article>
-    </div>
+
+        <div class="order-group-list" *ngIf="currentOrderGroups.length; else noActiveOrders">
+          <article class="order-group-card" *ngFor="let group of currentOrderGroups; trackBy: trackOrderGroup">
+            <div class="group-head">
+              <div class="group-head-main">
+                <img class="group-restaurant-image" [src]="group.restaurantImage" [alt]="group.restaurantName" />
+                <div>
+                  <h3>{{ group.restaurantName }}</h3>
+                  <p>{{ group.orders.length }} item{{ group.orders.length > 1 ? 's' : '' }}</p>
+                </div>
+              </div>
+              <div class="group-head-actions">
+                <span class="status-pill">{{ group.status }}</span>
+                <button type="button" class="cancel-order-btn" (click)="cancelCurrentOrder(group)">Cancel</button>
+              </div>
+            </div>
+
+            <div class="group-items">
+              <div class="group-item" *ngFor="let order of group.orders">
+                <span>{{ getOrderItemLabel(order) }}</span>
+                <strong>{{ order.amount }}</strong>
+              </div>
+            </div>
+
+            <div class="group-footer">
+              <span>Total</span>
+              <strong>{{ group.totalAmount }}</strong>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #noActiveOrders>
+          <div class="section-empty">No active orders right now.</div>
+        </ng-template>
+
+        <div class="section-header past-header">
+          <h2>Past Orders</h2>
+          <span>Last {{ pastOrderGroups.length }}</span>
+        </div>
+
+        <div class="order-group-list" *ngIf="pastOrderGroups.length; else noPastOrders">
+          <article class="order-group-card" *ngFor="let group of pastOrderGroups; trackBy: trackOrderGroup">
+            <div class="group-head">
+              <div class="group-head-main">
+                <img class="group-restaurant-image" [src]="group.restaurantImage" [alt]="group.restaurantName" />
+                <div>
+                  <h3>{{ group.restaurantName }}</h3>
+                  <p>{{ group.orders.length }} item{{ group.orders.length > 1 ? 's' : '' }}</p>
+                </div>
+              </div>
+              <div class="group-head-actions">
+                <button type="button" class="order-again-btn" (click)="orderAgain(group)">Order Again</button>
+                <button type="button" class="remove-order-btn" (click)="removePastOrder(group)">Remove</button>
+              </div>
+            </div>
+
+            <div class="group-items">
+              <div class="group-item" *ngFor="let order of group.orders">
+                <span>{{ getOrderItemLabel(order) }}</span>
+                <strong>{{ order.amount }}</strong>
+              </div>
+            </div>
+
+            <div class="group-footer">
+              <span>Total spent</span>
+              <strong>{{ group.totalAmount }}</strong>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #noPastOrders>
+          <div class="section-empty">No delivered orders yet.</div>
+        </ng-template>
+      </section>
+
+      <ng-template #noOrders>
+        <section class="empty-orders" aria-live="polite">
+          <div class="empty-icon" aria-hidden="true">🛒</div>
+          <h2>No orders yet</h2>
+          <p>Browse restaurants and place your first order.</p>
+          <button type="button" class="browse-btn" (click)="browseRestaurants()">Browse Restaurants</button>
+        </section>
+      </ng-template>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button
+        type="button"
+        class="nav-item"
+        *ngFor="let item of navigation"
+        [class.active]="isTabActive(item.label)"
+        (click)="navigateTo(item.route)"
+      >
+        <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+        <span>{{ item.label }}</span>
+      </button>
+    </nav>
   </div>
 </ion-content>

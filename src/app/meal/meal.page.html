@@ -1,0 +1,59 @@
+<ion-content class="meal-page" [fullscreen]="true">
+  <div class="meal-shell" *ngIf="restaurant && meal">
+    <header class="meal-top">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>Customize Meal</h1>
+    </header>
+
+    <section class="meal-card">
+      <img [src]="meal.image" [alt]="meal.name" />
+      <div class="meal-copy">
+        <h2>{{ meal.name }}</h2>
+        <p>{{ restaurant.name }}</p>
+        <small>{{ meal.description }}</small>
+      </div>
+    </section>
+
+    <section class="option-group">
+      <h3>Size</h3>
+      <div class="size-row">
+        <button
+          type="button"
+          class="size-btn"
+          *ngFor="let size of sizeOptions"
+          [class.active]="selectedSize === size"
+          (click)="selectedSize = size"
+        >
+          {{ size }}
+        </button>
+      </div>
+      <p class="price-preview">Price: {{ computedMealPrice }}</p>
+    </section>
+
+    <section class="option-group">
+      <h3>Spice Level</h3>
+      <div class="toggle-row">
+        <button type="button" class="toggle-btn" [class.active]="!spicy" (click)="spicy = false">Not Spicy</button>
+        <button type="button" class="toggle-btn" [class.active]="spicy" (click)="spicy = true">Spicy</button>
+      </div>
+    </section>
+
+    <section class="option-group">
+      <h3>Quantity</h3>
+      <div class="qty-row">
+        <button type="button" class="qty-btn" (click)="decreaseQuantity()">-</button>
+        <span>{{ quantity }}</span>
+        <button type="button" class="qty-btn" (click)="increaseQuantity()">+</button>
+      </div>
+    </section>
+
+    <section class="option-group">
+      <h3>Notes (Optional)</h3>
+      <textarea [(ngModel)]="notes" maxlength="120" placeholder="No onions, extra sauce, etc."></textarea>
+    </section>
+  </div>
+
+  <div class="bottom-cta" *ngIf="restaurant && meal">
+    <button type="button" class="add-cart-btn" (click)="addToCart()">{{ addToCartTotalLabel }}</button>
+  </div>
+</ion-content>

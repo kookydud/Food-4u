@@ -1,0 +1,205 @@
+<ion-content class="restaurant-page" [fullscreen]="true">
+  <div class="page-shell" *ngIf="restaurant as place">
+    <section class="hero" [style.background-image]="'url(' + place.image + ')'">
+      <div class="hero-overlay">
+        <button type="button" class="back-btn" (click)="goBack()">←</button>
+
+        <div class="hero-copy">
+          <h1>{{ place.name }}</h1>
+          <p>{{ cuisineLabel }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="meta-row">
+      <span>★ {{ place.rating }}</span>
+      <span>◔ {{ place.time }}</span>
+      <span>{{ place.fee }}</span>
+    </section>
+
+    <section class="section-tabs">
+      <button type="button" [class.active]="selectedSection === 'meals'" (click)="selectSection('meals')">Meals</button>
+      <button type="button" [class.active]="selectedSection === 'reviews'" (click)="selectSection('reviews')">Reviews</button>
+      <button type="button" [class.active]="selectedSection === 'info'" (click)="selectSection('info')">Info</button>
+    </section>
+
+    <section class="content-area" [class.with-cart-popup]="mealCartItems.length" *ngIf="selectedSection === 'meals'">
+      <h2>Meals</h2>
+
+      <article class="meal-card" *ngFor="let meal of meals" [class.highlighted-meal]="isMealHighlighted(meal)">
+        <img [src]="meal.image" [alt]="meal.name" />
+
+        <div class="meal-copy">
+          <div class="meal-title-row">
+            <h3>{{ meal.name }}</h3>
+            <span class="badge" *ngIf="meal.badge">{{ meal.badge }}</span>
+          </div>
+
+          <p>{{ meal.description }}</p>
+          <strong>{{ meal.price }}</strong>
+        </div>
+
+        <button type="button" class="add-btn" (click)="addMealToOrder(meal)">+ Add</button>
+      </article>
+
+      <aside class="meal-cart-popup" *ngIf="mealCartItems.length" aria-label="Cart summary">
+        <div class="meal-cart-head">
+          <strong>Cart ({{ mealCartCount }})</strong>
+          <span>{{ mealCartTotal }}</span>
+        </div>
+
+        <div class="meal-cart-list">
+          <article class="meal-cart-item" *ngFor="let item of mealCartItems" (click)="openMealFromCart(item)">
+            <div>
+              <h4>{{ item.mealName }}</h4>
+              <p>{{ item.size }} · {{ item.spicy ? 'Spicy' : 'Not spicy' }}</p>
+              <p>{{ item.quantity }} x {{ item.mealPrice }}</p>
+            </div>
+            <button type="button" class="remove-item-btn" (click)="$event.stopPropagation(); removeCartItem(item)">×</button>
+          </article>
+        </div>
+
+        <button type="button" class="checkout-btn" (click)="proceedToOrders()">Go to Cart</button>
+      </aside>
+    </section>
+
+    <section class="content-area reviews-area" *ngIf="selectedSection === 'reviews'">
+      <div class="reviews-header">
+        <h2>Reviews</h2>
+        <span>★ {{ reviewsAverage }} ({{ reviews.length }} reviews)</span>
+      </div>
+
+      <article class="review-card" *ngFor="let review of reviews">
+        <button
+          *ngIf="canEditReview(review) && !review.isEditing"
+          type="button"
+          class="review-edit-btn"
+          (click)="startEditingReview(review)"
+        >
+          Edit
+        </button>
+
+        <div class="review-row">
+          <div class="review-author-block">
+            <h3 class="review-author">{{ review.author }}</h3>
+            <span class="review-rating">★ {{ review.rating }}</span>
+          </div>
+        </div>
+
+        <p *ngIf="!review.isEditing">{{ review.comment }}</p>
+
+        <div class="review-edit-panel" *ngIf="canEditReview(review) && review.isEditing">
+          <div class="star-picker edit-picker" aria-label="Edit rating">
+            <button
+              type="button"
+              class="star-btn"
+              *ngFor="let star of reviewStars"
+              [class.active]="star <= review.draftRating"
+              [attr.aria-label]="'Rate ' + star + ' stars'"
+              (click)="setEditRating(review, star)"
+            >
+              ★
+            </button>
+          </div>
+
+          <textarea
+            class="review-edit-input"
+            [(ngModel)]="review.draftComment"
+            maxlength="200"
+            placeholder="Edit your comment..."
+          ></textarea>
+
+          <div class="review-edit-actions">
+            <button type="button" class="mini-btn neutral" (click)="cancelEditingReview(review)">Cancel</button>
+            <button type="button" class="mini-btn delete" (click)="deleteReview(review)">Delete</button>
+            <button
+              type="button"
+              class="mini-btn save"
+              [disabled]="!review.draftComment.trim()"
+              (click)="saveEditedReview(review)"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <div class="review-composer" role="group" aria-label="Write a review">
+        <div class="star-picker" aria-label="Choose rating">
+          <button
+            type="button"
+            class="star-btn"
+            *ngFor="let star of reviewStars"
+            [class.active]="star <= selectedReviewRating"
+            [attr.aria-label]="'Rate ' + star + ' stars'"
+            (click)="setReviewRating(star)"
+          >
+            ★
+          </button>
+        </div>
+
+        <div class="review-input-row">
+          <textarea
+            class="review-input"
+            [(ngModel)]="reviewComment"
+            maxlength="200"
+            placeholder="Write your comment..."
+          ></textarea>
+          <button type="button" class="send-btn" [disabled]="!reviewComment.trim()" (click)="addReview()">Post</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-area" *ngIf="selectedSection === 'info'">
+      <h2>Info</h2>
+
+      <article class="info-card" *ngIf="info">
+        <div class="info-about-panel">
+          <div class="info-section-label">About</div>
+          <p>{{ info.about }}</p>
+        </div>
+
+        <div class="info-contact-panel">
+          <div class="info-section-label">Contact info</div>
+
+          <ul class="info-contact-list">
+            <li>
+              <span class="info-bullet"></span>
+              <div>
+                <strong>Address</strong>
+                <p>{{ info.address }}</p>
+              </div>
+            </li>
+            <li>
+              <span class="info-bullet"></span>
+              <div>
+                <strong>Opening hours</strong>
+                <p>{{ info.openingHours }}</p>
+              </div>
+            </li>
+            <li>
+              <span class="info-bullet"></span>
+              <div>
+                <strong>Contact</strong>
+                <p>{{ info.contact }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button
+      type="button"
+      class="nav-item"
+      *ngFor="let item of navigation"
+      [class.active]="isTabActive(item.label)"
+      (click)="navigateTo(item.route)"
+    >
+      <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+      <span>{{ item.label }}</span>
+    </button>
+  </nav>
+</ion-content>

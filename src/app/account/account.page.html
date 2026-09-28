@@ -1,23 +1,95 @@
 <ion-content class="page-content">
   <div class="page-shell">
-    <header class="page-header">
-      <button type="button" class="back-btn" (click)="goHome()">←</button>
-      <h1>Account</h1>
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goHome()"><</button>
+      <span class="page-text">Account</span>
     </header>
 
     <section class="profile-card">
-      <div class="avatar">👤</div>
-      <div>
-        <h2>{{ profile.name }}</h2>
-        <p>{{ profile.email }}</p>
+      <div class="profile-top">
+        <div class="avatar">👤</div>
+        <div class="profile-copy">
+          <p class="profile-label">Profile</p>
+          <h2>{{ profile.name }}</h2>
+          <p>{{ profile.email }}</p>
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <div>
+          <span>Orders</span>
+          <strong>{{ orderCount }}</strong>
+        </div>
+        <div>
+          <span>Cart</span>
+          <strong>{{ activeCartRestaurantId ? 'Active' : 'Empty' }}</strong>
+        </div>
       </div>
     </section>
 
-    <div class="info-list">
-      <div class="info-item">Saved addresses</div>
-      <div class="info-item">Payment methods</div>
-      <div class="info-item">Notifications</div>
-      <div class="info-item">Settings</div>
-    </div>
+    <section class="quick-actions" aria-label="Account shortcuts">
+      <button type="button" class="quick-action-card" (click)="openOrders()">
+        <div class="quick-icon orders-icon">◫</div>
+        <strong>Orders</strong>
+      </button>
+
+      <button type="button" class="quick-action-card" (click)="openAddress()">
+        <div class="quick-icon address-icon">⌂</div>
+        <strong>Address</strong>
+      </button>
+
+      <button type="button" class="quick-action-card" (click)="openCart()">
+        <div class="quick-icon cart-icon">🛒</div>
+        <strong>Cart</strong>
+      </button>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h3>Perks for you</h3>
+      </div>
+
+      <div class="general-list">
+        <article class="general-item perk-item" *ngFor="let perk of perks">
+          <div class="perk-icon">{{ perk.icon }}</div>
+          <div class="perk-copy">
+            <h4>{{ perk.title }}</h4>
+            <p>{{ perk.description }}</p>
+          </div>
+          <span class="general-arrow">›</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h3>General</h3>
+      </div>
+
+      <div class="general-list">
+        <article class="general-item" *ngFor="let item of generalItems">
+          <div>
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
+          </div>
+          <span class="general-arrow">›</span>
+        </article>
+      </div>
+    </section>
+
+    <button type="button" class="logout-btn" (click)="logOut()">Log out</button>
   </div>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button
+      type="button"
+      class="nav-item"
+      *ngFor="let item of navigation"
+      [class.active]="isTabActive(item.label)"
+      (click)="navigateTo(item.route)"
+    >
+      <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+      <span>{{ item.label }}</span>
+    </button>
+  </nav>
 </ion-content>

@@ -1,23 +1,25 @@
 <ion-content class="browse-page" [fullscreen]="true">
   <div class="phone-shell">
     <header class="topbar">
+      <button type="button" class="loc-btn" aria-label="Location" (click)="goToAddress()" aria-label="Manage delivery address" >⚲</button>
       <button type="button" class="delivery-row" (click)="goToAddress()" aria-label="Manage delivery address">
-        <span class="pin">📍</span>
         <span class="delivery-text">Deliver to</span>
-        <span class="location">Current Location</span>
-        <span class="chevron">▾</span>
+        <span class="location">Current Location ▾ </span>
       </button>
-      <button type="button" class="bell-btn" aria-label="Notifications">🔔</button>
+      <button type="button" class="bell-btn" aria-label="Notifications">🕭</button>
+      
     </header>
+    
 
     <main class="content">
       <h1 class="brand">Food <span>4U</span></h1>
 
-      <label class="search-bar" aria-label="Search restaurants">
+      <label class="search-bar" aria-label="Search restaurants" (click)="goToSearch()">
         <span class="search-icon">⌕</span>
         <input
           type="text"
           [value]="searchTerm"
+          (focus)="goToSearch()"
           (input)="onSearchInput($event)"
           placeholder="Search restaurants, dishes..."
           aria-label="Search restaurants"
@@ -29,11 +31,14 @@
           type="button"
           class="category-pill"
           *ngFor="let category of categories"
+          [class.offer-category]="category.label === 'Offers'"
           [class.active]="selectedCategory === category.label"
           (click)="selectCategory(category.label)"
         >
-          <img class="category-icon" [src]="category.iconImage" [alt]="category.label + ' category icon'" />
-          <span>{{ category.label }}</span>
+          <span class="category-image-wrap">
+            <img class="category-icon" [src]="category.iconImage" [alt]="category.label + ' category icon'" />
+          </span>
+          <span class="category-label">{{ category.label }}</span>
         </button>
       </div>
 
@@ -42,8 +47,10 @@
         <span>{{ filteredRestaurants.length }} places</span>
       </div>
 
+      <p class="order-notice" *ngIf="orderNotice">{{ orderNotice }}</p>
+
       <section class="restaurant-list">
-        <article class="restaurant-card" *ngFor="let restaurant of filteredRestaurants">
+        <article class="restaurant-card" *ngFor="let restaurant of filteredRestaurants" (click)="openRestaurant(restaurant.id)">
           <div class="restaurant-image" [ngClass]="restaurant.tone">
             <img class="restaurant-photo" [src]="restaurant.image" [alt]="restaurant.name" />
             <span class="badge">{{ restaurant.badge }}</span>
@@ -52,16 +59,36 @@
           <div class="restaurant-details">
             <div class="restaurant-row">
               <h3>{{ restaurant.name }}</h3>
-              <span class="arrow">›</span>
+              <button type="button" class="arrow" (click)="$event.stopPropagation(); orderFromRestaurant(restaurant)">Order</button>
             </div>
             <p>{{ restaurant.cuisine }}</p>
             <div class="meta-row">
               <span class="rating">★ {{ restaurant.rating }}</span>
               <span class="time">◔ {{ restaurant.time }}</span>
-              <span class="fee">💵 {{ restaurant.fee }}</span>
+              <span class="fee"> {{ restaurant.fee }}</span>
             </div>
           </div>
         </article>
+      </section>
+
+      <div class="section-header meals-header">
+        <h2>Meals</h2>
+        <span>{{ homeMeals.length }} items</span>
+      </div>
+
+      <section class="meal-row" *ngIf="homeMeals.length">
+        <button
+          type="button"
+          class="meal-pill"
+          *ngFor="let meal of homeMeals"
+          (click)="openMealRestaurant(meal.restaurantId)"
+        >
+          <img class="meal-pill-image" [src]="meal.mealImage" [alt]="meal.mealName" />
+          <span class="meal-pill-copy">
+            <strong>{{ meal.mealName }}</strong>
+            <small>{{ meal.restaurantName }} · {{ meal.mealPrice }}</small>
+          </span>
+        </button>
       </section>
     </main>
 
@@ -71,7 +98,7 @@
         class="nav-item"
         *ngFor="let item of navigation"
         [class.active]="isTabActive(item.label)"
-        (click)="navigateTo(item.route, item.label)"
+        (click)="navigateTo(item.route)"
       >
         <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
         <span>{{ item.label }}</span>

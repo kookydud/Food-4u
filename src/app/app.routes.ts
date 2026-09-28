@@ -22,8 +22,20 @@ export const routes: Routes = [
     loadComponent: () => import('./account/account.page').then((m) => m.AccountPage),
   },
   {
+    path: 'account-cart',
+    loadComponent: () => import('./account-cart/account-cart.page').then((m) => m.AccountCartPage),
+  },
+  {
     path: 'address',
     loadComponent: () => import('./address/address.page').then((m) => m.AddressPage),
+  },
+  {
+    path: 'checkout/:id',
+    loadComponent: () => import('./checkout/checkout.page').then((m) => m.CheckoutPage),
+  },
+  {
+    path: 'vouchers/:id',
+    loadComponent: () => import('./vouchers/vouchers.page').then((m) => m.VouchersPage),
   },
   {
     path: '',
@@ -41,5 +53,17 @@ export const routes: Routes = [
   {
     path: 'verification',
     loadComponent: () => import('./verification/verification.page').then((m) => m.VerificationPage),
+  },
+  {
+    path: 'restaurant/:id',
+    loadComponent: () => import('./restaurant/restaurant.page').then((m) => m.RestaurantPage),
+  },
+  {
+    path: 'meal/:restaurantId/:mealName',
+    loadComponent: () => import('./meal/meal.page').then((m) => m.MealPage),
+  },
+  {
+    path: 'restaurant-cart/:id',
+    loadComponent: () => import('./restaurant-cart/restaurant-cart.page').then((m) => m.RestaurantCartPage),
   },
 ];
