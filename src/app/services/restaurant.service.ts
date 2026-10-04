@@ -90,6 +90,66 @@ export class RestaurantService {
       image: 'assets/icon/Foods/restau_curry.jpg',
       category: 'Curry',
     },
+    {
+      id: 'tokyo-ramen-street',
+      name: 'Tokyo Ramen Street',
+      cuisine: '₱229.00 · Sushi',
+      rating: 4.8,
+      time: '28–38 min',
+      fee: '🚲 ₱39.00',
+      badge: 'Hot',
+      tone: 'ramen',
+      image: createPlaceholderImage('Tokyo Ramen Street'),
+      category: 'Sushi',
+    },
+    {
+      id: 'firegrill-bbq',
+      name: 'FireGrill BBQ',
+      cuisine: '₱215.00 · Burgers',
+      rating: 4.7,
+      time: '24–34 min',
+      fee: '🚲 ₱45.00',
+      badge: 'Top Pick',
+      tone: 'grill',
+      image: createPlaceholderImage('FireGrill BBQ'),
+      category: 'Burgers',
+    },
+    {
+      id: 'mediterranean-bowl',
+      name: 'Mediterranean Bowl',
+      cuisine: '₱185.00 · Curry',
+      rating: 4.6,
+      time: '22–32 min',
+      fee: '🚲 Free',
+      badge: 'Healthy',
+      tone: 'salad',
+      image: createPlaceholderImage('Mediterranean Bowl'),
+      category: 'Curry',
+    },
+    {
+      id: 'brick-oven-co',
+      name: 'Brick Oven Co.',
+      cuisine: '₱279.00 · Pizza',
+      rating: 4.9,
+      time: '26–36 min',
+      fee: '🚲 ₱59.00',
+      badge: 'Chef Choice',
+      tone: 'pizza',
+      image: createPlaceholderImage('Brick Oven Co.'),
+      category: 'Pizza',
+    },
+    {
+      id: 'green-wok-kitchen',
+      name: 'Green Wok Kitchen',
+      cuisine: '₱169.00 · Sushi',
+      rating: 4.7,
+      time: '20–30 min',
+      fee: '🚲 ₱35.00',
+      badge: 'New',
+      tone: 'wok',
+      image: createPlaceholderImage('Green Wok Kitchen'),
+      category: 'Sushi',
+    },
   ];
 
   private readonly mealsByRestaurant: Record<string, RestaurantMeal[]> = {
@@ -177,6 +237,111 @@ export class RestaurantService {
         image: 'assets/icon/salad.jpg',
       },
     ],
+    'tokyo-ramen-street': [
+      {
+        name: 'Shoyu Chashu Ramen',
+        description: 'Soy broth, pork chashu, soft egg, scallions',
+        price: '₱229.00',
+        image: createPlaceholderImage('Shoyu Ramen', 280, 180),
+        badge: 'Popular',
+      },
+      {
+        name: 'Spicy Miso Ramen',
+        description: 'Rich miso broth with chili oil and corn',
+        price: '₱249.00',
+        image: createPlaceholderImage('Spicy Miso', 280, 180),
+      },
+      {
+        name: 'Gyoza Plate',
+        description: 'Pan-fried dumplings with sesame dip',
+        price: '₱139.00',
+        image: createPlaceholderImage('Gyoza', 280, 180),
+      },
+    ],
+    'firegrill-bbq': [
+      {
+        name: 'Smoky Angus Burger',
+        description: 'Angus patty, smoked cheddar, onion jam',
+        price: '₱215.00',
+        image: createPlaceholderImage('Angus Burger', 280, 180),
+        badge: 'Best Seller',
+      },
+      {
+        name: 'BBQ Pulled Pork Stack',
+        description: 'Slow-cooked pork, pickles, brioche bun',
+        price: '₱239.00',
+        image: createPlaceholderImage('Pulled Pork', 280, 180),
+      },
+      {
+        name: 'Loaded Potato Wedges',
+        description: 'Cheese sauce, bacon bits, spring onion',
+        price: '₱129.00',
+        image: createPlaceholderImage('Potato Wedges', 280, 180),
+      },
+    ],
+    'mediterranean-bowl': [
+      {
+        name: 'Chicken Shawarma Bowl',
+        description: 'Herb rice, grilled chicken, garlic yogurt',
+        price: '₱185.00',
+        image: createPlaceholderImage('Shawarma Bowl', 280, 180),
+        badge: 'Healthy',
+      },
+      {
+        name: 'Falafel Hummus Plate',
+        description: 'Crispy falafel, hummus, cucumber tomato salad',
+        price: '₱169.00',
+        image: createPlaceholderImage('Falafel Plate', 280, 180),
+      },
+      {
+        name: 'Lemon Herb Couscous',
+        description: 'Light couscous with roasted vegetables',
+        price: '₱149.00',
+        image: createPlaceholderImage('Couscous', 280, 180),
+      },
+    ],
+    'brick-oven-co': [
+      {
+        name: 'Four Cheese Blaze',
+        description: 'Mozzarella, parmesan, provolone, cheddar',
+        price: '₱279.00',
+        image: createPlaceholderImage('Four Cheese Pizza', 280, 180),
+        badge: 'Trending',
+      },
+      {
+        name: 'Pepperoni Inferno',
+        description: 'Pepperoni, chili flakes, roasted garlic oil',
+        price: '₱299.00',
+        image: createPlaceholderImage('Pepperoni Pizza', 280, 180),
+      },
+      {
+        name: 'Pesto Mushroom Flatbread',
+        description: 'Basil pesto, mushrooms, feta crumble',
+        price: '₱219.00',
+        image: createPlaceholderImage('Pesto Flatbread', 280, 180),
+      },
+    ],
+    'green-wok-kitchen': [
+      {
+        name: 'Garlic Shrimp Yakisoba',
+        description: 'Stir-fried noodles, shrimp, garlic soy glaze',
+        price: '₱169.00',
+        image: createPlaceholderImage('Shrimp Yakisoba', 280, 180),
+        badge: 'New',
+      },
+      {
+        name: 'Teriyaki Tofu Rice',
+        description: 'Crispy tofu, teriyaki sauce, sesame seeds',
+        price: '₱159.00',
+        image: createPlaceholderImage('Tofu Rice', 280, 180),
+      },
+      {
+        name: 'Chicken Katsu Curry',
+        description: 'Breaded chicken, curry sauce, steamed rice',
+        price: '₱199.00',
+        image: createPlaceholderImage('Katsu Curry', 280, 180),
+      },
+    ],
   };
 
   private readonly reviewsByRestaurant: Record<string, RestaurantReview[]> = {
@@ -195,6 +360,26 @@ export class RestaurantService {
     'spice-route': [
       { author: 'Luis', rating: 4.7, comment: 'Rich curry flavor and generous serving.' },
       { author: 'Mia', rating: 4.5, comment: 'Comfort food, nicely packed and warm.' },
+    ],
+    'tokyo-ramen-street': [
+      { author: 'Yuri', rating: 4.9, comment: 'Broth is deep and flavorful, noodles were perfect.' },
+      { author: 'Sam', rating: 4.7, comment: 'Fast delivery and still piping hot on arrival.' },
+    ],
+    'firegrill-bbq': [
+      { author: 'Toni', rating: 4.8, comment: 'Great smoky profile and generous burger portions.' },
+      { author: 'Bea', rating: 4.6, comment: 'Wedges were crispy and the sauce was excellent.' },
+    ],
+    'mediterranean-bowl': [
+      { author: 'Hana', rating: 4.7, comment: 'Fresh ingredients and balanced flavors.' },
+      { author: 'Jules', rating: 4.5, comment: 'Healthy but still filling and tasty.' },
+    ],
+    'brick-oven-co': [
+      { author: 'Ralph', rating: 5, comment: 'Crust texture is outstanding, cheese blend is great.' },
+      { author: 'Ina', rating: 4.8, comment: 'Pepperoni had just the right kick.' },
+    ],
+    'green-wok-kitchen': [
+      { author: 'Cara', rating: 4.7, comment: 'Yakisoba was flavorful and not too oily.' },
+      { author: 'Noel', rating: 4.6, comment: 'Good value meals and quick prep time.' },
     ],
   };
 
@@ -222,6 +407,36 @@ export class RestaurantService {
       address: '2nd Floor, Curry Plaza, Quezon City',
       openingHours: '10:30 AM - 10:30 PM',
       contact: '+63 912 345 4444',
+    },
+    'tokyo-ramen-street': {
+      about: 'Ramen bar focused on rich broths and handmade noodles.',
+      address: '3rd Floor, Eastwood Avenue, Quezon City',
+      openingHours: '11:00 AM - 11:00 PM',
+      contact: '+63 912 345 5555',
+    },
+    'firegrill-bbq': {
+      about: 'Flame-grilled burgers and smoky comfort classics.',
+      address: 'Unit 12, Capitol Commons, Pasig',
+      openingHours: '10:00 AM - 12:00 AM',
+      contact: '+63 912 345 6666',
+    },
+    'mediterranean-bowl': {
+      about: 'Levant-inspired bowls and wraps with fresh daily prep.',
+      address: 'Ground Floor, Greenfield District, Mandaluyong',
+      openingHours: '9:00 AM - 9:00 PM',
+      contact: '+63 912 345 7777',
+    },
+    'brick-oven-co': {
+      about: 'Stone-baked pizza house with premium toppings.',
+      address: '2nd Floor, Uptown Parade, Taguig',
+      openingHours: '11:00 AM - 10:30 PM',
+      contact: '+63 912 345 8888',
+    },
+    'green-wok-kitchen': {
+      about: 'Wok-seared rice and noodle bowls for everyday cravings.',
+      address: 'Level 1, Ayala Malls Circuit, Makati',
+      openingHours: '10:00 AM - 10:00 PM',
+      contact: '+63 912 345 9999',
     },
   };
 

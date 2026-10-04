@@ -1,0 +1,32 @@
+<ion-content class="payment-page" [fullscreen]="true">
+  <div class="payment-shell" *ngIf="restaurant">
+    <header class="topbar">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <span class="page-text">Payment Verification</span>
+    </header>
+
+    <section class="summary-card">
+      <p>Method</p>
+      <h1>{{ paymentMethod }}</h1>
+      <strong>{{ formatCurrency(total) }}</strong>
+    </section>
+
+    <section class="form-card">
+      <h2>Enter Verification Code</h2>
+      <p class="helper-text">Testing only: use code <strong>123456</strong></p>
+
+      <label class="field-label" for="verification-code">Verification Code</label>
+      <input
+        id="verification-code"
+        type="text"
+        maxlength="6"
+        [(ngModel)]="verificationCode"
+        placeholder="123456"
+      />
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="button" class="confirm-btn" (click)="verifyAndPlaceOrder()">Verify & Place Order</button>
+    </section>
+  </div>
+</ion-content>

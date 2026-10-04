@@ -27,7 +27,10 @@
       <h2>Meals</h2>
 
       <article class="meal-card" *ngFor="let meal of meals" [class.highlighted-meal]="isMealHighlighted(meal)">
-        <img [src]="meal.image" [alt]="meal.name" />
+        <div class="meal-image-wrap">
+          <img [src]="meal.image" [alt]="meal.name" />
+          <span class="allergy-prompt" *ngIf="getMealAllergyPrompt(meal) as prompt">{{ prompt }}</span>
+        </div>
 
         <div class="meal-copy">
           <div class="meal-title-row">

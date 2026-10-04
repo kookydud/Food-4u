@@ -1,0 +1,20 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>Help center</h1>
+    </header>
+
+    <section class="support-card">
+      <h2>Need support?</h2>
+      <p>For urgent concerns, contact us at support@food4u.app or chat from the next release of the app.</p>
+    </section>
+
+    <section class="faq-list">
+      <article class="faq-card" *ngFor="let faq of faqs">
+        <h3>{{ faq.question }}</h3>
+        <p>{{ faq.answer }}</p>
+      </article>
+    </section>
+  </div>
+</ion-content>

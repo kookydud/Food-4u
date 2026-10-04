@@ -138,6 +138,34 @@
   border-radius: 12px;
 }
 
+.meal-image-wrap {
+  position: relative;
+  width: 78px;
+  height: 78px;
+}
+
+.meal-image-wrap img {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.allergy-prompt {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border-radius: 8px;
+  background: rgba(185, 28, 28, 0.92);
+  color: #ffffff;
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 3px 5px;
+  text-align: center;
+}
+
 .meal-title-row {
   display: flex;
   align-items: center;

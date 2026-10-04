@@ -1,0 +1,100 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>Personal taste</h1>
+    </header>
+
+    <section class="card">
+      <h2>Food preferences</h2>
+      <div class="chip-grid">
+        <button
+          type="button"
+          class="chip"
+          *ngFor="let option of dietOptions"
+          [class.active]="option.selected"
+          (click)="toggleOption(dietOptions, option.label)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Allergens</h2>
+      <div class="chip-grid">
+        <button
+          type="button"
+          class="chip"
+          *ngFor="let option of allergenOptions"
+          [class.active]="option.selected"
+          (click)="toggleOption(allergenOptions, option.label)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+
+      <div class="custom-allergy-row">
+        <input
+          type="text"
+          [(ngModel)]="customAllergyInput"
+          placeholder="Add specific allergy (example: cashew, shrimp paste)"
+        />
+        <button type="button" class="add-custom-btn" (click)="addCustomAllergy()">Add</button>
+      </div>
+
+      <div class="custom-allergy-list" *ngIf="customAllergies.length">
+        <button
+          type="button"
+          class="chip active removable"
+          *ngFor="let allergy of customAllergies"
+          (click)="removeCustomAllergy(allergy)"
+        >
+          {{ allergy }} ×
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Avoid ingredients</h2>
+      <div class="chip-grid">
+        <button
+          type="button"
+          class="chip"
+          *ngFor="let option of avoidIngredientOptions"
+          [class.active]="option.selected"
+          (click)="toggleOption(avoidIngredientOptions, option.label)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Cooking preferences</h2>
+      <div class="chip-grid">
+        <button
+          type="button"
+          class="chip"
+          *ngFor="let option of cookingPreferenceOptions"
+          [class.active]="option.selected"
+          (click)="toggleOption(cookingPreferenceOptions, option.label)"
+        >
+          {{ option.label }}
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Spice level</h2>
+      <div class="spice-row">
+        <label><input type="radio" name="spice" value="Mild" [(ngModel)]="spiceLevel" /> Mild</label>
+        <label><input type="radio" name="spice" value="Medium" [(ngModel)]="spiceLevel" /> Medium</label>
+        <label><input type="radio" name="spice" value="Spicy" [(ngModel)]="spiceLevel" /> Spicy</label>
+      </div>
+    </section>
+
+    <button type="button" class="save-btn" (click)="savePreferences()">Save preferences</button>
+    <p class="save-message" *ngIf="saveMessage">{{ saveMessage }}</p>
+  </div>
+</ion-content>

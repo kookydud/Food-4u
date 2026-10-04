@@ -1,0 +1,22 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>Invite friends</h1>
+    </header>
+
+    <section class="invite-card">
+      <h2>Give 15% off, get rewards</h2>
+      <p>Friends can use your code on their first order. You both get voucher rewards after checkout.</p>
+
+      <div class="code-box">
+        <span>Your invite code</span>
+        <strong>{{ referralCode }}</strong>
+      </div>
+
+      <button type="button" class="copy-btn" (click)="copyCode()">Copy code</button>
+    </section>
+
+    <p class="share-message" *ngIf="shareMessage">{{ shareMessage }}</p>
+  </div>
+</ion-content>

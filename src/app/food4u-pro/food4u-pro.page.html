@@ -1,0 +1,35 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>Food4U Pro</h1>
+    </header>
+
+    <section class="hero-card">
+      <h2>Upgrade your account</h2>
+      <p>Unlock faster checkout access, premium promo drops, and dedicated support.</p>
+      <ul>
+        <li>Early access to high-demand restaurants</li>
+        <li>Monthly Pro-only discounts</li>
+        <li>Priority issue resolution</li>
+      </ul>
+    </section>
+
+    <section class="plan-list">
+      <article class="plan-card" *ngFor="let plan of plans" [class.active]="selectedPlan === plan.name">
+        <div>
+          <h3>{{ plan.name }}</h3>
+          <p>{{ plan.summary }}</p>
+        </div>
+        <div class="plan-action">
+          <strong>{{ plan.price }}</strong>
+          <button type="button" (click)="choosePlan(plan.name)">
+            {{ selectedPlan === plan.name ? 'Selected' : 'Choose' }}
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <p class="notice" *ngIf="notice">{{ notice }}</p>
+  </div>
+</ion-content>

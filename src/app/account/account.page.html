@@ -50,7 +50,7 @@
       </div>
 
       <div class="general-list">
-        <article class="general-item perk-item" *ngFor="let perk of perks">
+        <article class="general-item perk-item" *ngFor="let perk of perks" (click)="openSection(perk.route)">
           <div class="perk-icon">{{ perk.icon }}</div>
           <div class="perk-copy">
             <h4>{{ perk.title }}</h4>
@@ -67,7 +67,7 @@
       </div>
 
       <div class="general-list">
-        <article class="general-item" *ngFor="let item of generalItems">
+        <article class="general-item" *ngFor="let item of generalItems" (click)="openSection(item.route)">
           <div>
             <h4>{{ item.title }}</h4>
             <p>{{ item.description }}</p>

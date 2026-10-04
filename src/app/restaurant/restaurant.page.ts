@@ -13,6 +13,12 @@ import {
   RestaurantService,
 } from '../services/restaurant.service';
 import { navigationItems } from '../shared/app-data';
+import {
+  findMatchedAllergyKeyword,
+  getAllergyKeywords,
+  loadPersonalTasteState,
+  PersonalTasteState,
+} from '../shared/personal-taste';
 
 type DisplayReview = {
   author: string;
@@ -45,6 +51,7 @@ export class RestaurantPage implements OnDestroy, OnInit {
   navigation = navigationItems;
   highlightedMealName = '';
   mealCartItems: StoredMealCartItem[] = [];
+  personalTaste: PersonalTasteState = loadPersonalTasteState();
   private highlightTimer: ReturnType<typeof setTimeout> | null = null;
   private mealCartSubscription?: Subscription;
 
@@ -103,6 +110,7 @@ export class RestaurantPage implements OnDestroy, OnInit {
     }
 
     this.restaurant = restaurant;
+    this.personalTaste = loadPersonalTasteState();
     this.meals = this.restaurantService.getMealsByRestaurant(restaurant.id);
     this.mealCartItems = this.getIncomingCartItems(restaurant.id);
     this.hydrateReviews(restaurant.id);
@@ -289,6 +297,23 @@ export class RestaurantPage implements OnDestroy, OnInit {
 
   isMealHighlighted(meal: RestaurantMeal): boolean {
     return !!this.highlightedMealName && meal.name.toLowerCase() === this.highlightedMealName;
+  }
+
+  getMealAllergyPrompt(meal: RestaurantMeal): string | null {
+    const keywords = getAllergyKeywords(this.personalTaste);
+
+    if (!keywords.length) {
+      return null;
+    }
+
+    const mealText = `${meal.name} ${meal.description}`;
+    const matched = findMatchedAllergyKeyword(mealText, keywords);
+
+    if (matched) {
+      return `Allergy alert: ${matched}`;
+    }
+
+    return null;
   }
 
   private hydrateReviews(restaurantId: string): void {

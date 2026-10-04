@@ -121,6 +121,17 @@ export class CheckoutPage implements OnInit {
     }
 
     this.saveDraft();
+
+    if (this.selectedPaymentMethod === 'GCash') {
+      this.router.navigateByUrl(`/payment-gcash/${this.restaurant.id}`);
+      return;
+    }
+
+    if (this.selectedPaymentMethod === 'Credit/Debit Card') {
+      this.router.navigateByUrl(`/payment-card/${this.restaurant.id}`);
+      return;
+    }
+
     this.localDataService.checkoutMealCartForCurrentUser(this.restaurant.name, this.restaurant.id, 'Preparing');
     this.router.navigateByUrl('/orders', {
       state: {

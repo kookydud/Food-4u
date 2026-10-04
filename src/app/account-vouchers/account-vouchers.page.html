@@ -1,0 +1,42 @@
+<ion-content class="page-content">
+  <div class="page-shell">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <h1>My vouchers</h1>
+    </header>
+
+    <section class="group-card">
+      <div class="group-head">
+        <h2>All stores</h2>
+        <span>{{ globalVouchers.length }}</span>
+      </div>
+
+      <article class="voucher-card" *ngFor="let voucher of globalVouchers">
+        <div>
+          <h3>{{ voucher.code }}</h3>
+          <p>{{ voucher.title }}</p>
+          <small>{{ voucher.description }}</small>
+        </div>
+        <strong>{{ formatMinimumOrder(voucher.minimumSubtotal) }}</strong>
+      </article>
+    </section>
+
+    <section class="group-card">
+      <div class="group-head">
+        <h2>Restaurant specific</h2>
+        <span>{{ restaurantVouchers.length }}</span>
+      </div>
+
+      <article class="voucher-card" *ngFor="let voucher of restaurantVouchers">
+        <div>
+          <h3>{{ voucher.code }}</h3>
+          <p>{{ voucher.title }}</p>
+          <small>{{ voucher.description }}</small>
+        </div>
+        <strong>{{ formatMinimumOrder(voucher.minimumSubtotal) }}</strong>
+      </article>
+    </section>
+
+    <button type="button" class="browse-btn" (click)="openOffers()">Browse offers</button>
+  </div>
+</ion-content>

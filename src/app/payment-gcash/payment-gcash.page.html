@@ -1,0 +1,39 @@
+<ion-content class="payment-page" [fullscreen]="true">
+  <div class="payment-shell" *ngIf="restaurant">
+    <header class="topbar">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <span class="page-text">GCash Payment</span>
+    </header>
+
+    <section class="summary-card">
+      <p>Paying for</p>
+      <h1>{{ restaurant.name }}</h1>
+      <strong>{{ formatCurrency(total) }}</strong>
+    </section>
+
+    <section class="form-card">
+      <h2>Account Details</h2>
+
+      <label class="field-label" for="gcash-name">Account Name</label>
+      <input
+        id="gcash-name"
+        type="text"
+        [(ngModel)]="gcashName"
+        placeholder="Juan Dela Cruz"
+      />
+
+      <label class="field-label" for="gcash-number">GCash Number</label>
+      <input
+        id="gcash-number"
+        type="tel"
+        maxlength="11"
+        [(ngModel)]="gcashNumber"
+        placeholder="09XXXXXXXXX"
+      />
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="button" class="confirm-btn" (click)="continueToVerification()">Continue to Verification</button>
+    </section>
+  </div>
+</ion-content>

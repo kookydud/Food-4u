@@ -1,0 +1,115 @@
+.payment-page {
+  --background: #f4f4f7;
+}
+
+.payment-shell {
+  min-height: 100dvh;
+  padding: 16px 14px 28px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.back-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 1.05rem;
+}
+
+.page-text {
+  color: #000000;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.summary-card,
+.form-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card {
+  margin-bottom: 12px;
+}
+
+.summary-card p,
+.summary-card h1,
+.summary-card strong,
+.form-card h2 {
+  margin: 0;
+}
+
+.summary-card p {
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.summary-card h1 {
+  margin-top: 4px;
+  color: #111827;
+  font-size: 1.06rem;
+}
+
+.summary-card strong {
+  margin-top: 8px;
+  display: block;
+  color: #111827;
+  font-size: 1.24rem;
+}
+
+.form-card h2 {
+  color: #111827;
+  font-size: 1rem;
+}
+
+.field-label {
+  display: block;
+  margin: 10px 0 6px;
+  color: #374151;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.form-card input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.form-card input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.error-message {
+  margin: 10px 0 0;
+  color: #b91c1c;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.confirm-btn {
+  margin-top: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  background: #111827;
+  color: #ffffff;
+  font-weight: 700;
+}

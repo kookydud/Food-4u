@@ -1,0 +1,63 @@
+<ion-content class="payment-page" [fullscreen]="true">
+  <div class="payment-shell" *ngIf="restaurant">
+    <header class="topbar">
+      <button type="button" class="back-btn" (click)="goBack()">←</button>
+      <span class="page-text">Card Payment</span>
+    </header>
+
+    <section class="summary-card">
+      <p>Paying for</p>
+      <h1>{{ restaurant.name }}</h1>
+      <strong>{{ formatCurrency(total) }}</strong>
+    </section>
+
+    <section class="form-card">
+      <h2>Card Details</h2>
+
+      <label class="field-label" for="card-holder">Cardholder Name</label>
+      <input
+        id="card-holder"
+        type="text"
+        [(ngModel)]="cardHolderName"
+        placeholder="Name on card"
+      />
+
+      <label class="field-label" for="card-number">Card Number</label>
+      <input
+        id="card-number"
+        type="text"
+        maxlength="19"
+        [(ngModel)]="cardNumber"
+        placeholder="1234 5678 9012 3456"
+      />
+
+      <div class="inline-fields">
+        <div>
+          <label class="field-label" for="expiry">Expiry</label>
+          <input
+            id="expiry"
+            type="text"
+            maxlength="5"
+            [(ngModel)]="expiry"
+            placeholder="MM/YY"
+          />
+        </div>
+
+        <div>
+          <label class="field-label" for="cvv">CVV</label>
+          <input
+            id="cvv"
+            type="password"
+            maxlength="4"
+            [(ngModel)]="cvv"
+            placeholder="123"
+          />
+        </div>
+      </div>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="button" class="confirm-btn" (click)="continueToVerification()">Continue to Verification</button>
+    </section>
+  </div>
+</ion-content>

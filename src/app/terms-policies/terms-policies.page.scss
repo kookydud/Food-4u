@@ -1,0 +1,59 @@
+.page-content {
+  --background: #f4f4f7;
+}
+
+.page-shell {
+  min-height: 100dvh;
+  padding: 16px 14px 28px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+  font-size: 1.1rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.policy-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+}
+
+.policy-card + .policy-card {
+  margin-top: 10px;
+}
+
+.policy-card h2,
+.policy-card p {
+  margin: 0;
+}
+
+.policy-card h2 {
+  color: #111827;
+  font-size: 1rem;
+}
+
+.policy-card p {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
