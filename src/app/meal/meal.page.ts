@@ -76,6 +76,7 @@ export class MealPage implements OnInit {
       this.selectedSize = state.editItem.size;
       this.spicy = state.editItem.spicy;
       this.quantity = Math.max(1, state.editItem.quantity);
+      this.notes = state.editItem.notes ?? '';
     }
 
     this.returnToCart = !!state.returnToCart;
@@ -133,6 +134,7 @@ export class MealPage implements OnInit {
       size: this.selectedSize,
       spicy: this.spicy,
       quantity: this.quantity,
+      notes: this.notes,
     });
 
     if (this.returnToCart) {

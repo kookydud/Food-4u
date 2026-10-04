@@ -21,6 +21,7 @@ export type StoredOrder = {
   quantity?: number;
   size?: 'Small' | 'Regular' | 'Large';
   spicy?: boolean;
+  notes?: string;
 };
 
 export type StoredMealCartItem = {
@@ -29,6 +30,45 @@ export type StoredMealCartItem = {
   quantity: number;
   size: 'Small' | 'Regular' | 'Large';
   spicy: boolean;
+  notes?: string;
+};
+
+export type OrderRider = {
+  name: string;
+  vehicle: string;
+  plate: string;
+  rating: number;
+  phone: string;
+};
+
+export type StoredOrderTracking = {
+  groupId: string;
+  restaurantId: string;
+  restaurantName: string;
+  placedAt: string;
+  rider: OrderRider;
+  address: string;
+  paymentMethod: string;
+  totalAmount: string;
+  discountAmount: string;
+  lastNotifiedStage: number;
+  rated: boolean;
+};
+
+export type OrderCheckoutDetails = {
+  address: string;
+  paymentMethod: string;
+  totalAmount: number;
+  discountAmount: number;
+};
+
+export type AppNotification = {
+  id: string;
+  title: string;
+  body: string;
+  createdAt: string;
+  read: boolean;
+  groupId?: string;
 };
 
 export type StoredDeliveryAddress = {
@@ -76,7 +116,16 @@ type PersistedState = {
   searchStateByUser: Record<string, SearchState>;
   searchHistoryByUser: Record<string, string[]>;
   reviewsByUserByRestaurant: Record<string, Record<string, StoredRestaurantReview[]>>;
+  trackingByUser: Record<string, Record<string, StoredOrderTracking>>;
+  notificationsByUser: Record<string, AppNotification[]>;
 };
+
+const RIDERS: OrderRider[] = [
+  { name: 'Paolo Reyes', vehicle: 'Honda Click 125', plate: 'NAB 4821', rating: 4.9, phone: '+63 917 555 0142' },
+  { name: 'Jessa Cruz', vehicle: 'Yamaha Mio i 125', plate: 'DAF 3367', rating: 4.8, phone: '+63 918 555 0388' },
+  { name: 'Mark Villanueva', vehicle: 'Suzuki Raider 150', plate: 'NCQ 7754', rating: 4.9, phone: '+63 915 555 0611' },
+  { name: 'Liza Santos', vehicle: 'Honda Beat', plate: 'WTR 1290', rating: 4.7, phone: '+63 926 555 0975' },
+];
 
 const STORAGE_KEY = 'food4u.localData.v1';
 
@@ -87,6 +136,7 @@ export class LocalDataService {
   private state: PersistedState = this.readState();
   private readonly mealCartChangedSubject = new Subject<void>();
   private readonly ordersChangedSubject = new Subject<void>();
+  private readonly notificationsChangedSubject = new Subject<void>();
 
   watchMealCartChanges(): Observable<void> {
     return this.mealCartChangedSubject.asObservable();
@@ -94,6 +144,10 @@ export class LocalDataService {
 
   watchOrderChanges(): Observable<void> {
     return this.ordersChangedSubject.asObservable();
+  }
+
+  watchNotificationChanges(): Observable<void> {
+    return this.notificationsChangedSubject.asObservable();
   }
 
   async registerUser(fullName: string, email: string, password: string): Promise<{ ok: boolean; message?: string }> {
@@ -188,6 +242,7 @@ export class LocalDataService {
       quantity: order.quantity,
       size: order.size,
       spicy: order.spicy,
+      notes: order.notes,
     };
 
     this.state.ordersByUser[userEmail] = [newOrder, ...this.state.ordersByUser[userEmail]].slice(0, 30);
@@ -215,6 +270,7 @@ export class LocalDataService {
 
     this.state.ordersByUser[userEmail] = nextOrders;
     this.state.orderHistoryCustomizedByUser[userEmail] = true;
+    delete this.state.trackingByUser[userEmail]?.[groupId];
     this.persist();
     this.notifyOrdersChanged();
 
@@ -392,10 +448,9 @@ export class LocalDataService {
     }
 
     const quantityToAdd = Math.max(1, item.quantity ?? 1);
+    const notes = item.notes?.trim() ?? '';
     const cart = this.state.mealCartByUserByRestaurant[userEmail][restaurantId];
-    const existing = cart.find(
-      (entry) => entry.mealName === item.mealName && entry.size === item.size && entry.spicy === item.spicy,
-    );
+    const existing = cart.find((entry) => this.isSameCartItem(entry, { ...item, notes }));
 
     if (existing) {
       existing.quantity += quantityToAdd;
@@ -410,6 +465,7 @@ export class LocalDataService {
       quantity: quantityToAdd,
       size: item.size,
       spicy: item.spicy,
+      notes,
     });
 
     this.persist();
@@ -427,7 +483,7 @@ export class LocalDataService {
     const cart = this.state.mealCartByUserByRestaurant[userEmail][restaurantId] ?? [];
 
     this.state.mealCartByUserByRestaurant[userEmail][restaurantId] = cart.filter(
-      (entry) => !(entry.mealName === item.mealName && entry.size === item.size && entry.spicy === item.spicy),
+      (entry) => !this.isSameCartItem(entry, item),
     );
 
     this.persist();
@@ -498,11 +554,16 @@ export class LocalDataService {
     this.persist();
   }
 
-  checkoutMealCartForCurrentUser(restaurantName: string, restaurantId: string, orderStatus: string = 'Delivered'): void {
+  checkoutMealCartForCurrentUser(
+    restaurantName: string,
+    restaurantId: string,
+    orderStatus: string = 'Delivered',
+    details?: OrderCheckoutDetails,
+  ): string | null {
     const userEmail = this.state.currentUserEmail;
 
     if (!userEmail || !restaurantId.trim()) {
-      return;
+      return null;
     }
 
     this.ensureUserDefaults(userEmail);
@@ -522,9 +583,33 @@ export class LocalDataService {
         quantity: item.quantity,
         size: item.size,
         spicy: item.spicy,
+        notes: item.notes,
       });
     });
 
+    if (details) {
+      this.state.trackingByUser[userEmail][orderGroupId] = {
+        groupId: orderGroupId,
+        restaurantId,
+        restaurantName,
+        placedAt: new Date().toISOString(),
+        rider: RIDERS[Math.floor(Math.random() * RIDERS.length)],
+        address: details.address,
+        paymentMethod: details.paymentMethod,
+        totalAmount: this.formatCurrency(details.totalAmount),
+        discountAmount: this.formatCurrency(details.discountAmount),
+        lastNotifiedStage: 0,
+        rated: false,
+      };
+      this.pushNotification(userEmail, {
+        title: 'Order placed',
+        body: `${restaurantName} received your order.`,
+        groupId: orderGroupId,
+      });
+    }
+
+    // A real order now lives in the history, so the sample-history seeding must never replace it.
+    this.state.orderHistoryCustomizedByUser[userEmail] = true;
     this.state.mealCartByUserByRestaurant[userEmail][restaurantId] = [];
     this.state.checkoutDraftByUserByRestaurant[userEmail][restaurantId] = {
       address: '',
@@ -534,6 +619,165 @@ export class LocalDataService {
     };
     this.persist();
     this.notifyMealCartChanged();
+
+    return orderGroupId;
+  }
+
+  getOrderTrackingForCurrentUser(groupId: string): StoredOrderTracking | null {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail || !groupId.trim()) {
+      return null;
+    }
+
+    this.ensureUserDefaults(userEmail);
+    const tracking = this.state.trackingByUser[userEmail][groupId];
+    return tracking ? { ...tracking } : null;
+  }
+
+  getOrderTrackingsForCurrentUser(): StoredOrderTracking[] {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return [];
+    }
+
+    this.ensureUserDefaults(userEmail);
+    return Object.values(this.state.trackingByUser[userEmail]).map((tracking) => ({ ...tracking }));
+  }
+
+  /** Creates tracking for an active order placed before tracking existed, so it can still progress. */
+  ensureOrderTrackingForCurrentUser(groupId: string, orders: StoredOrder[]): void {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail || !orders.length) {
+      return;
+    }
+
+    this.ensureUserDefaults(userEmail);
+
+    if (this.state.trackingByUser[userEmail][groupId]) {
+      return;
+    }
+
+    const primary = orders[0];
+    const total = orders.reduce((sum, order) => sum + this.parseCurrency(order.amount), 0);
+    const address = this.getPrimaryAddressForCurrentUser();
+
+    this.state.trackingByUser[userEmail][groupId] = {
+      groupId,
+      restaurantId: primary.restaurantId ?? '',
+      restaurantName: primary.restaurantName ?? this.extractRestaurantName(primary.title),
+      placedAt: primary.createdAt,
+      rider: RIDERS[Math.floor(Math.random() * RIDERS.length)],
+      address: address ? [address.label, address.addressLine].join(' · ') : '',
+      paymentMethod: 'Cash on Delivery',
+      totalAmount: this.formatCurrency(total),
+      discountAmount: this.formatCurrency(0),
+      lastNotifiedStage: 0,
+      rated: false,
+    };
+    this.persist();
+  }
+
+  updateOrderTrackingForCurrentUser(groupId: string, updates: Partial<Pick<StoredOrderTracking, 'lastNotifiedStage' | 'rated'>>): void {
+    const userEmail = this.state.currentUserEmail;
+    const tracking = userEmail ? this.state.trackingByUser[userEmail]?.[groupId] : undefined;
+
+    if (!tracking) {
+      return;
+    }
+
+    Object.assign(tracking, updates);
+    this.persist();
+  }
+
+  setOrderGroupStatusForCurrentUser(groupId: string, status: string): void {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return;
+    }
+
+    this.ensureUserDefaults(userEmail);
+    let changed = false;
+
+    this.state.ordersByUser[userEmail].forEach((order) => {
+      if (order.orderGroupId === groupId && order.status !== status) {
+        order.status = status;
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      this.persist();
+      this.notifyOrdersChanged();
+    }
+  }
+
+  getNotificationsForCurrentUser(): AppNotification[] {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return [];
+    }
+
+    this.ensureUserDefaults(userEmail);
+    return this.state.notificationsByUser[userEmail].map((notification) => ({ ...notification }));
+  }
+
+  getUnreadNotificationCountForCurrentUser(): number {
+    return this.getNotificationsForCurrentUser().filter((notification) => !notification.read).length;
+  }
+
+  addNotificationForCurrentUser(notification: Pick<AppNotification, 'title' | 'body' | 'groupId'>): void {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return;
+    }
+
+    this.ensureUserDefaults(userEmail);
+    this.pushNotification(userEmail, notification);
+    this.persist();
+  }
+
+  markNotificationReadForCurrentUser(notificationId: string): void {
+    const userEmail = this.state.currentUserEmail;
+    const target = userEmail ? this.state.notificationsByUser[userEmail]?.find((entry) => entry.id === notificationId) : undefined;
+
+    if (!target || target.read) {
+      return;
+    }
+
+    target.read = true;
+    this.persist();
+    this.notificationsChangedSubject.next();
+  }
+
+  markAllNotificationsReadForCurrentUser(): void {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return;
+    }
+
+    this.ensureUserDefaults(userEmail);
+    this.state.notificationsByUser[userEmail].forEach((notification) => (notification.read = true));
+    this.persist();
+    this.notificationsChangedSubject.next();
+  }
+
+  clearNotificationsForCurrentUser(): void {
+    const userEmail = this.state.currentUserEmail;
+
+    if (!userEmail) {
+      return;
+    }
+
+    this.state.notificationsByUser[userEmail] = [];
+    this.persist();
+    this.notificationsChangedSubject.next();
   }
 
   reorderPastOrderGroupToCart(restaurantId: string, orders: StoredOrder[]): boolean {
@@ -871,6 +1115,14 @@ export class LocalDataService {
       this.state.reviewsByUserByRestaurant[userEmail] = {};
     }
 
+    if (!this.state.trackingByUser[userEmail]) {
+      this.state.trackingByUser[userEmail] = {};
+    }
+
+    if (!this.state.notificationsByUser[userEmail]) {
+      this.state.notificationsByUser[userEmail] = [];
+    }
+
     if (typeof this.state.orderHistoryCustomizedByUser[userEmail] !== 'boolean') {
       this.state.orderHistoryCustomizedByUser[userEmail] = false;
     }
@@ -910,6 +1162,8 @@ export class LocalDataService {
         searchStateByUser: parsed.searchStateByUser ?? {},
         searchHistoryByUser: parsed.searchHistoryByUser ?? {},
         reviewsByUserByRestaurant: parsed.reviewsByUserByRestaurant ?? {},
+        trackingByUser: parsed.trackingByUser ?? {},
+        notificationsByUser: parsed.notificationsByUser ?? {},
       };
     } catch {
       return this.createDefaultState();
@@ -929,6 +1183,8 @@ export class LocalDataService {
       searchStateByUser: {},
       searchHistoryByUser: {},
       reviewsByUserByRestaurant: {},
+      trackingByUser: {},
+      notificationsByUser: {},
     };
   }
 
@@ -1212,6 +1468,7 @@ export class LocalDataService {
         quantity: Math.max(order.quantity, 1),
         size: order.size,
         spicy: !!order.spicy,
+        notes: order.notes ?? '',
       };
     }
 
@@ -1258,6 +1515,28 @@ export class LocalDataService {
 
   private formatCurrency(amount: number): string {
     return `₱${amount.toFixed(2)}`;
+  }
+
+  private isSameCartItem(entry: StoredMealCartItem, item: Pick<StoredMealCartItem, 'mealName' | 'size' | 'spicy' | 'notes'>): boolean {
+    return entry.mealName === item.mealName
+      && entry.size === item.size
+      && entry.spicy === item.spicy
+      && (entry.notes ?? '').trim() === (item.notes ?? '').trim();
+  }
+
+  private pushNotification(userEmail: string, notification: Pick<AppNotification, 'title' | 'body' | 'groupId'>): void {
+    this.state.notificationsByUser[userEmail] = [
+      {
+        id: `note-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        title: notification.title,
+        body: notification.body,
+        groupId: notification.groupId,
+        createdAt: new Date().toISOString(),
+        read: false,
+      },
+      ...(this.state.notificationsByUser[userEmail] ?? []),
+    ].slice(0, 50);
+    this.notificationsChangedSubject.next();
   }
 
   private notifyMealCartChanged(): void {

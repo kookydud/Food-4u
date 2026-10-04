@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { LocalDataService } from '../services/local-data.service';
 import { Restaurant, RestaurantMeal, RestaurantService } from '../services/restaurant.service';
 import { Category, foodCategories, navigationItems } from '../shared/app-data';
@@ -20,10 +21,13 @@ type HomeMeal = {
   styleUrls: ['home.page.scss'],
   imports: [CommonModule, IonContent],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   selectedCategory = 'Offers';
   searchTerm = '';
   orderNotice = '';
+  deliveryLocationLabel = 'Current Location';
+  unreadNotificationCount = 0;
+  private notificationSubscription?: Subscription;
 
   categories: Category[] = foodCategories;
 
@@ -35,6 +39,7 @@ export class HomePage implements OnInit {
     private readonly router: Router,
     private readonly restaurantService: RestaurantService,
     private readonly localDataService: LocalDataService,
+    private readonly changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +51,35 @@ export class HomePage implements OnInit {
     const saved = this.localDataService.getSearchStateForCurrentUser();
     this.searchTerm = '';
     this.selectedCategory = saved.selectedCategory;
+    this.notificationSubscription = this.localDataService
+      .watchNotificationChanges()
+      .subscribe(() => {
+        this.refreshHeader();
+        this.changeDetector.markForCheck();
+      });
+    this.refreshHeader();
+  }
+
+  ionViewWillEnter(): void {
+    if (this.localDataService.isSignedIn()) {
+      this.refreshHeader();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.notificationSubscription?.unsubscribe();
+  }
+
+  openNotifications(): void {
+    this.router.navigateByUrl('/notifications');
+  }
+
+  private refreshHeader(): void {
+    const primaryAddress = this.localDataService.getPrimaryAddressForCurrentUser();
+    this.deliveryLocationLabel = primaryAddress
+      ? `${primaryAddress.label} · ${primaryAddress.addressLine.split(',')[0]}`
+      : 'Current Location';
+    this.unreadNotificationCount = this.localDataService.getUnreadNotificationCountForCurrentUser();
   }
 
   get filteredRestaurants() {

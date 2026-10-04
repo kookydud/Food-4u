@@ -1,0 +1,58 @@
+// Layout, cards and buttons come from orders.page.scss.
+
+// Clear the fixed global topbar.
+.content {
+  padding-top: 96px;
+}
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.notification-card.unread .unread-dot {
+  background: #6d28d9;
+}
+
+.notification-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-copy strong {
+  color: #111827;
+  font-size: 0.9rem;
+}
+
+.notification-copy span {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.notification-card:not(.unread) .notification-copy strong {
+  font-weight: 600;
+}
+
+.notification-card small {
+  color: #9ca3af;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}

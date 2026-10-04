@@ -132,8 +132,14 @@ export class CheckoutPage implements OnInit {
       return;
     }
 
-    this.localDataService.checkoutMealCartForCurrentUser(this.restaurant.name, this.restaurant.id, 'Preparing');
-    this.router.navigateByUrl('/orders', {
+    const groupId = this.localDataService.checkoutMealCartForCurrentUser(this.restaurant.name, this.restaurant.id, 'Order placed', {
+      address: this.deliveryAddress,
+      paymentMethod: this.selectedPaymentMethod,
+      totalAmount: this.total,
+      discountAmount: this.discountAmount,
+    });
+    this.router.navigateByUrl(groupId ? `/track/${groupId}` : '/orders', {
+      replaceUrl: true,
       state: {
         recentOrderRestaurantName: this.restaurant.name,
       },

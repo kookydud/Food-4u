@@ -16,6 +16,7 @@
           <div class="meal-order-copy">
             <h3>{{ item.mealName }}</h3>
             <p>{{ item.size }} · {{ item.spicy ? 'Spicy' : 'Not spicy' }}</p>
+            <p *ngIf="item.notes">📝 {{ item.notes }}</p>
             <small>{{ item.quantity }} x {{ item.mealPrice }}</small>
           </div>
 

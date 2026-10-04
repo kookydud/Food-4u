@@ -20,6 +20,7 @@
             <div>
               <h3>{{ item.mealName }}</h3>
               <p>{{ item.size }} · {{ item.spicy ? 'Spicy' : 'Not spicy' }} · {{ item.quantity }} pcs</p>
+              <p *ngIf="item.notes">📝 {{ item.notes }}</p>
             </div>
             <strong>{{ getItemTotal(item) }}</strong>
           </article>

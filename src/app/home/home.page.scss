@@ -51,6 +51,11 @@
 }
 
 .location {
+  display: block;
+  max-width: 62vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 700;
   color: #1d1d1d;
   margin-left: 0;
@@ -63,6 +68,7 @@
 }
 
 .bell-btn {
+  position: relative;
   border: none;
   background: #ffffff;
   border-radius: 12px;
@@ -72,6 +78,23 @@
   font-size: 18px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+}
+
+.bell-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .loc-btn {

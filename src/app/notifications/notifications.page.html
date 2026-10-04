@@ -1,0 +1,57 @@
+<ion-content class="orders-page" [fullscreen]="true">
+  <div class="phone-shell">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goHome()"><</button>
+      <span class="page-text">Notifications</span>
+    </header>
+
+    <main class="content">
+      <div class="section-header" *ngIf="notifications.length">
+        <h2>{{ unreadCount ? unreadCount + ' unread' : 'All caught up' }}</h2>
+        <div class="group-head-actions">
+          <button type="button" class="remove-order-btn details-btn" *ngIf="unreadCount" (click)="markAllRead()">Mark all read</button>
+          <button type="button" class="remove-order-btn" (click)="clearAll()">Clear</button>
+        </div>
+      </div>
+
+      <div class="order-group-list" *ngIf="notifications.length; else noNotifications">
+        <button
+          type="button"
+          class="order-group-card notification-card"
+          *ngFor="let notification of notifications; trackBy: trackNotification"
+          [class.unread]="!notification.read"
+          (click)="openNotification(notification)"
+        >
+          <span class="unread-dot" aria-hidden="true"></span>
+          <span class="notification-copy">
+            <strong>{{ notification.title }}</strong>
+            <span>{{ notification.body }}</span>
+          </span>
+          <small>{{ formatWhen(notification.createdAt) }}</small>
+        </button>
+      </div>
+
+      <ng-template #noNotifications>
+        <section class="empty-orders" aria-live="polite">
+          <div class="empty-icon" aria-hidden="true">🔔</div>
+          <h2>No notifications</h2>
+          <p>Order updates will show up here.</p>
+          <button type="button" class="browse-btn" (click)="goHome()">Browse Restaurants</button>
+        </section>
+      </ng-template>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button
+        type="button"
+        class="nav-item"
+        *ngFor="let item of navigation"
+        [class.active]="isTabActive(item.label)"
+        (click)="navigateTo(item.route)"
+      >
+        <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+        <span>{{ item.label }}</span>
+      </button>
+    </nav>
+  </div>
+</ion-content>

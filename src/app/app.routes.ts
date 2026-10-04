@@ -99,6 +99,14 @@ export const routes: Routes = [
     loadComponent: () => import('./meal/meal.page').then((m) => m.MealPage),
   },
   {
+    path: 'track/:groupId',
+    loadComponent: () => import('./track-order/track-order.page').then((m) => m.TrackOrderPage),
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./notifications/notifications.page').then((m) => m.NotificationsPage),
+  },
+  {
     path: 'restaurant-cart/:id',
     loadComponent: () => import('./restaurant-cart/restaurant-cart.page').then((m) => m.RestaurantCartPage),
   },

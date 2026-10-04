@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -34,6 +34,7 @@ export class OrdersPage implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly localDataService: LocalDataService,
     private readonly restaurantService: RestaurantService,
+    private readonly changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +45,7 @@ export class OrdersPage implements OnInit, OnDestroy {
 
     this.orderSubscription = this.localDataService.watchOrderChanges().subscribe(() => {
       this.refreshOrders();
+      this.changeDetector.markForCheck();
     });
 
     this.refreshOrders();
@@ -85,6 +87,18 @@ export class OrdersPage implements OnInit, OnDestroy {
     if (!this.localDataService.removeOrderGroupForCurrentUser(group.groupId)) {
       this.orderNotice = 'Unable to remove that past order.';
     }
+  }
+
+  trackOrder(group: OrderGroup): void {
+    this.router.navigateByUrl(`/track/${group.groupId}`);
+  }
+
+  hasTracking(group: OrderGroup): boolean {
+    return !!this.localDataService.getOrderTrackingForCurrentUser(group.groupId);
+  }
+
+  canCancel(group: OrderGroup): boolean {
+    return group.status === 'Order placed' || group.status === 'Preparing';
   }
 
   orderAgain(group: OrderGroup): void {
@@ -143,7 +157,8 @@ export class OrdersPage implements OnInit, OnDestroy {
     if (order.mealName) {
       const orderSize = order.size ?? 'Regular';
       const quantity = order.quantity ?? 1;
-      return `${order.mealName} (${orderSize}${order.spicy ? ', Spicy' : ''}) x${quantity}`;
+      const notes = order.notes ? ` · ${order.notes}` : '';
+      return `${order.mealName} (${orderSize}${order.spicy ? ', Spicy' : ''}) x${quantity}${notes}`;
     }
 
     const restaurantName = order.restaurantName ?? this.extractRestaurantName(order.title);

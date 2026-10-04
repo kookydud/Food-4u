@@ -27,11 +27,19 @@
                 <div>
                   <h3>{{ group.restaurantName }}</h3>
                   <p>{{ group.orders.length }} item{{ group.orders.length > 1 ? 's' : '' }}</p>
+                  <span class="status-pill status-pill-inline">{{ group.status }}</span>
                 </div>
               </div>
               <div class="group-head-actions">
-                <span class="status-pill">{{ group.status }}</span>
-                <button type="button" class="cancel-order-btn" (click)="cancelCurrentOrder(group)">Cancel</button>
+                <button type="button" class="order-again-btn" (click)="trackOrder(group)">Track</button>
+                <button
+                  type="button"
+                  class="cancel-order-btn"
+                  *ngIf="canCancel(group)"
+                  (click)="cancelCurrentOrder(group)"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
 
@@ -70,6 +78,7 @@
               </div>
               <div class="group-head-actions">
                 <button type="button" class="order-again-btn" (click)="orderAgain(group)">Order Again</button>
+                <button type="button" class="remove-order-btn details-btn" *ngIf="hasTracking(group)" (click)="trackOrder(group)">Details</button>
                 <button type="button" class="remove-order-btn" (click)="removePastOrder(group)">Remove</button>
               </div>
             </div>

@@ -4,9 +4,12 @@
       <button type="button" class="loc-btn" aria-label="Location" (click)="goToAddress()" aria-label="Manage delivery address" >⚲</button>
       <button type="button" class="delivery-row" (click)="goToAddress()" aria-label="Manage delivery address">
         <span class="delivery-text">Deliver to</span>
-        <span class="location">Current Location ▾ </span>
+        <span class="location">{{ deliveryLocationLabel }} ▾ </span>
       </button>
-      <button type="button" class="bell-btn" aria-label="Notifications">🕭</button>
+      <button type="button" class="bell-btn" aria-label="Notifications" (click)="openNotifications()">
+        🕭
+        <span class="bell-badge" *ngIf="unreadNotificationCount">{{ unreadNotificationCount > 9 ? '9+' : unreadNotificationCount }}</span>
+      </button>
       
     </header>
     

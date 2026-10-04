@@ -1,0 +1,193 @@
+<ion-content class="orders-page" [fullscreen]="true">
+  <div class="phone-shell">
+    <header class="topbar">
+      <button type="button" class="back-btn" aria-label="Back" (click)="goBack()"><</button>
+      <span class="page-text">Track Order</span>
+    </header>
+
+    <main class="content" *ngIf="tracking as order; else notFound">
+      <p class="order-notice" *ngIf="orderNotice">{{ orderNotice }}</p>
+
+      <section class="order-group-card track-hero">
+        <div class="group-head">
+          <div class="group-head-main" (click)="openRestaurant()">
+            <img class="group-restaurant-image" [src]="restaurant?.image" [alt]="order.restaurantName" />
+            <div>
+              <h3>{{ order.restaurantName }}</h3>
+              <p>{{ items.length }} item{{ items.length === 1 ? '' : 's' }} · {{ order.totalAmount }}</p>
+            </div>
+          </div>
+          <span class="status-pill">{{ currentStage.status }}</span>
+        </div>
+
+        <div class="eta-row" aria-live="polite">
+          <span class="eta-icon" aria-hidden="true">{{ currentStage.icon }}</span>
+          <div>
+            <strong>{{ etaLabel }}</strong>
+            <p>{{ currentStage.description }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="order-group-card map-card" aria-label="Delivery map">
+        <svg viewBox="0 0 320 190" role="img" [attr.aria-label]="'Rider is ' + currentStage.status">
+          <rect x="0" y="0" width="320" height="190" rx="14" class="map-ground" />
+          <rect x="182" y="66" width="74" height="70" rx="10" class="map-park" />
+          <rect x="70" y="118" width="64" height="48" rx="8" class="map-block" />
+          <rect x="196" y="150" width="96" height="28" rx="8" class="map-block" />
+          <rect x="70" y="16" width="60" height="58" rx="8" class="map-block" />
+          <path d="M0 98 H320 M0 46 H320 M46 0 V190 M152 0 V190 M276 0 V190 M0 150 H320" class="map-street" />
+
+          <polyline [attr.points]="routePoints" class="map-route" />
+          <polyline [attr.points]="travelledPoints" class="map-route-done" />
+
+          <g [attr.transform]="'translate(' + restaurantPin.x + ' ' + restaurantPin.y + ')'">
+            <circle r="13" class="map-pin" />
+            <text text-anchor="middle" dy="5" font-size="13">🍽️</text>
+          </g>
+          <g [attr.transform]="'translate(' + homePin.x + ' ' + homePin.y + ')'">
+            <circle r="13" class="map-pin" />
+            <text text-anchor="middle" dy="5" font-size="13">🏠</text>
+          </g>
+          <g [attr.transform]="'translate(' + riderPosition.x + ' ' + riderPosition.y + ')'" *ngIf="!isDelivered">
+            <circle r="16" class="map-rider-halo" />
+            <circle r="12" class="map-rider" />
+            <text text-anchor="middle" dy="5" font-size="13">🛵</text>
+          </g>
+        </svg>
+        <div class="map-legend">
+          <span>{{ order.restaurantName }}</span>
+          <span>{{ order.address || 'Your address' }}</span>
+        </div>
+      </section>
+
+      <div class="section-header">
+        <h2>Order Status</h2>
+        <span>Step {{ stageIndex + 1 }} of {{ timeline.length }}</span>
+      </div>
+
+      <section class="order-group-card">
+        <ol class="timeline">
+          <li *ngFor="let step of timeline; trackBy: trackStep" [ngClass]="step.state">
+            <span class="timeline-dot" aria-hidden="true">{{ step.state === 'done' ? '✓' : step.icon }}</span>
+            <div class="timeline-copy">
+              <strong>{{ step.title }}</strong>
+              <p>{{ step.description }}</p>
+            </div>
+            <span class="timeline-time">{{ step.time }}</span>
+          </li>
+        </ol>
+      </section>
+
+      <div class="section-header">
+        <h2>{{ riderHeadline }}</h2>
+        <span>★ {{ order.rider.rating }}</span>
+      </div>
+
+      <section class="order-group-card rider-card">
+        <div class="rider-avatar" aria-hidden="true">🧑🏽</div>
+        <div class="rider-copy">
+          <h3>{{ order.rider.name }}</h3>
+          <p>{{ order.rider.vehicle }} · {{ order.rider.plate }}</p>
+        </div>
+        <div class="group-head-actions" *ngIf="!isDelivered">
+          <a class="order-again-btn rider-action" [href]="'tel:' + order.rider.phone">Call</a>
+          <a class="remove-order-btn details-btn rider-action" [href]="'sms:' + order.rider.phone">Chat</a>
+        </div>
+      </section>
+
+      <ng-container *ngIf="canRate || reviewSubmitted">
+        <div class="section-header">
+          <h2>How was your food?</h2>
+          <span>{{ order.restaurantName }}</span>
+        </div>
+
+        <section class="order-group-card rate-card" *ngIf="canRate">
+          <div class="star-picker" aria-label="Choose rating">
+            <button
+              type="button"
+              class="star-btn"
+              *ngFor="let star of reviewStars"
+              [class.active]="star <= reviewRating"
+              [attr.aria-label]="'Rate ' + star + ' stars'"
+              (click)="setReviewRating(star)"
+            >
+              ★
+            </button>
+          </div>
+          <textarea
+            class="rate-input"
+            [(ngModel)]="reviewComment"
+            maxlength="200"
+            placeholder="Tell others about your order..."
+          ></textarea>
+          <div class="group-head-actions rate-actions">
+            <button type="button" class="remove-order-btn details-btn" (click)="skipReview()">Not now</button>
+            <button type="button" class="order-again-btn" [disabled]="!reviewComment.trim()" (click)="submitReview()">
+              Post review
+            </button>
+          </div>
+        </section>
+
+        <div class="section-empty" *ngIf="reviewSubmitted">
+          Thanks! Your review is now on {{ order.restaurantName }}'s Reviews tab.
+        </div>
+      </ng-container>
+
+      <div class="section-header">
+        <h2>Order Summary</h2>
+        <span>{{ order.paymentMethod }}</span>
+      </div>
+
+      <section class="order-group-card">
+        <div class="group-items">
+          <div class="group-item" *ngFor="let item of items">
+            <span>
+              {{ getItemLabel(item) }}
+              <small class="item-note" *ngIf="item.notes">📝 {{ item.notes }}</small>
+            </span>
+            <strong>{{ item.amount }}</strong>
+          </div>
+          <div class="group-item" *ngIf="order.discountAmount !== '₱0.00'">
+            <span>Voucher discount</span>
+            <strong>-{{ order.discountAmount }}</strong>
+          </div>
+        </div>
+
+        <div class="group-footer">
+          <span>Total</span>
+          <strong>{{ order.totalAmount }}</strong>
+        </div>
+
+        <div class="summary-address" *ngIf="order.address">
+          <span>Deliver to</span>
+          <p>{{ order.address }}</p>
+        </div>
+      </section>
+    </main>
+
+    <ng-template #notFound>
+      <main class="content">
+        <section class="empty-orders">
+          <div class="empty-icon" aria-hidden="true">🛵</div>
+          <h2>Order not found</h2>
+          <p>This order may have been cancelled or removed.</p>
+          <button type="button" class="browse-btn" (click)="goBack()">Back to Orders</button>
+        </section>
+      </main>
+    </ng-template>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button
+        type="button"
+        class="nav-item"
+        *ngFor="let item of navigation"
+        [class.active]="isTabActive(item.label)"
+        (click)="navigateTo(item.route)"
+      >
+        <img class="nav-icon" [src]="item.iconImage" [alt]="item.label + ' navigation icon'" />
+        <span>{{ item.label }}</span>
+      </button>
+    </nav>
+  </div>
+</ion-content>

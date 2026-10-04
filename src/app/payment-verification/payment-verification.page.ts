@@ -90,8 +90,14 @@ export class PaymentVerificationPage implements OnInit {
       }
     }
 
-    this.localDataService.checkoutMealCartForCurrentUser(this.restaurant.name, this.restaurant.id, 'Preparing');
-    this.router.navigateByUrl('/orders', {
+    const groupId = this.localDataService.checkoutMealCartForCurrentUser(this.restaurant.name, this.restaurant.id, 'Order placed', {
+      address: draft.address,
+      paymentMethod: this.paymentMethod,
+      totalAmount: this.total,
+      discountAmount: this.discountAmount,
+    });
+    this.router.navigateByUrl(groupId ? `/track/${groupId}` : '/orders', {
+      replaceUrl: true,
       state: {
         recentOrderRestaurantName: this.restaurant.name,
       },

@@ -34,9 +34,6 @@ export type RestaurantInfo = {
   contact: string;
 };
 
-const createPlaceholderImage = (label: string, width = 220, height = 150) =>
-  `https://placehold.co/${width}x${height}/F3E8FF/6D28D9?text=${encodeURIComponent(label)}`;
-
 @Injectable({
   providedIn: 'root',
 })
@@ -51,7 +48,7 @@ export class RestaurantService {
       fee: '🚲 ₱49.00',
       badge: 'Popular',
       tone: 'pasta',
-      image: 'assets/icon/Foods/restau_pizza.jpg',
+      image: 'assets/images/restaurants/bella-napoli.jpg',
       category: 'Pizza',
     },
     {
@@ -63,7 +60,7 @@ export class RestaurantService {
       fee: '🚲 Free',
       badge: 'New',
       tone: 'sushi',
-      image: 'assets/icon/Foods/restau_sushis.jpg',
+      image: 'assets/images/restaurants/sakura-garden.jpg',
       category: 'Sushi',
     },
     {
@@ -75,7 +72,7 @@ export class RestaurantService {
       fee: '🚲 ₱79.00',
       badge: 'Top Rated',
       tone: 'burger',
-      image: 'assets/icon/Foods/restau_burgers.jpg',
+      image: 'assets/images/restaurants/the-burger-lab.jpg',
       category: 'Burgers',
     },
     {
@@ -87,7 +84,7 @@ export class RestaurantService {
       fee: '🚲 ₱49.00',
       badge: 'Trending',
       tone: 'curry',
-      image: 'assets/icon/Foods/restau_curry.jpg',
+      image: 'assets/images/restaurants/spice-route.jpg',
       category: 'Curry',
     },
     {
@@ -99,7 +96,7 @@ export class RestaurantService {
       fee: '🚲 ₱39.00',
       badge: 'Hot',
       tone: 'ramen',
-      image: createPlaceholderImage('Tokyo Ramen Street'),
+      image: 'assets/images/restaurants/tokyo-ramen-street.jpg',
       category: 'Sushi',
     },
     {
@@ -111,7 +108,7 @@ export class RestaurantService {
       fee: '🚲 ₱45.00',
       badge: 'Top Pick',
       tone: 'grill',
-      image: createPlaceholderImage('FireGrill BBQ'),
+      image: 'assets/images/restaurants/firegrill-bbq.jpg',
       category: 'Burgers',
     },
     {
@@ -123,7 +120,7 @@ export class RestaurantService {
       fee: '🚲 Free',
       badge: 'Healthy',
       tone: 'salad',
-      image: createPlaceholderImage('Mediterranean Bowl'),
+      image: 'assets/images/restaurants/mediterranean-bowl.jpg',
       category: 'Curry',
     },
     {
@@ -135,7 +132,7 @@ export class RestaurantService {
       fee: '🚲 ₱59.00',
       badge: 'Chef Choice',
       tone: 'pizza',
-      image: createPlaceholderImage('Brick Oven Co.'),
+      image: 'assets/images/restaurants/brick-oven-co.jpg',
       category: 'Pizza',
     },
     {
@@ -147,7 +144,7 @@ export class RestaurantService {
       fee: '🚲 ₱35.00',
       badge: 'New',
       tone: 'wok',
-      image: createPlaceholderImage('Green Wok Kitchen'),
+      image: 'assets/images/restaurants/green-wok-kitchen.jpg',
       category: 'Sushi',
     },
   ];
@@ -158,20 +155,20 @@ export class RestaurantService {
         name: "Chef's Margherita",
         description: 'Fresh basil, mozzarella, tomato sauce',
         price: '₱299.00',
-        image: 'assets/icon/Foods/pizza.jpg',
+        image: 'assets/images/meals/chefs-margherita.jpg',
         badge: 'Popular',
       },
       {
         name: 'House Truffle Pasta',
         description: 'Creamy truffle sauce with parmesan',
         price: '₱249.00',
-        image: 'assets/icon/Foods/restau_pizza.jpg',
+        image: 'assets/images/meals/house-truffle-pasta.jpg',
       },
       {
         name: 'Garden Side Salad',
         description: 'Fresh greens with lemon dressing',
         price: '₱119.00',
-        image: 'assets/icon/salad.jpg',
+        image: 'assets/images/meals/garden-side-salad.jpg',
       },
     ],
     'sakura-garden': [
@@ -179,20 +176,20 @@ export class RestaurantService {
         name: 'Signature Salmon Roll',
         description: 'Salmon, avocado, cucumber',
         price: '₱175.00',
-        image: 'assets/icon/Foods/sushis.jpg',
+        image: 'assets/images/meals/signature-salmon-roll.jpg',
         badge: 'Best Seller',
       },
       {
         name: 'Dragon Maki',
         description: 'Eel sauce, tempura flakes, crabstick',
         price: '₱209.00',
-        image: 'assets/icon/Foods/restau_sushis.jpg',
+        image: 'assets/images/meals/dragon-maki.jpg',
       },
       {
         name: 'Seaweed Salad',
         description: 'Sesame, soy vinaigrette',
         price: '₱99.00',
-        image: 'assets/icon/salad.jpg',
+        image: 'assets/images/meals/seaweed-salad.jpg',
       },
     ],
     'the-burger-lab': [
@@ -200,20 +197,20 @@ export class RestaurantService {
         name: 'Lab Double Cheeseburger',
         description: 'Double patty, cheddar, house sauce',
         price: '₱265.00',
-        image: 'assets/icon/Foods/burgers.jpg',
+        image: 'assets/images/meals/lab-double-cheeseburger.jpg',
         badge: 'Popular',
       },
       {
         name: 'Classic Bacon Burger',
         description: 'Smoked bacon, lettuce, pickles',
         price: '₱239.00',
-        image: 'assets/icon/Foods/restau_burgers.jpg',
+        image: 'assets/images/meals/classic-bacon-burger.jpg',
       },
       {
         name: 'Crunchy Side Salad',
         description: 'Romaine, cherry tomatoes, dressing',
         price: '₱109.00',
-        image: 'assets/icon/salad.jpg',
+        image: 'assets/images/meals/crunchy-side-salad.jpg',
       },
     ],
     'spice-route': [
@@ -221,20 +218,20 @@ export class RestaurantService {
         name: "Chef's Special Curry",
         description: "Today's freshest ingredients",
         price: '₱199.00',
-        image: 'assets/icon/Foods/restau_curry.jpg',
+        image: 'assets/images/meals/chefs-special-curry.jpg',
         badge: 'Popular',
       },
       {
         name: 'House Signature Curry',
         description: 'A classic crowd favourite',
         price: '₱189.00',
-        image: 'assets/icon/Foods/restau_curry.jpg',
+        image: 'assets/images/meals/house-signature-curry.jpg',
       },
       {
         name: 'Side Salad',
         description: 'Fresh greens, house dressing',
         price: '₱99.00',
-        image: 'assets/icon/salad.jpg',
+        image: 'assets/images/meals/side-salad.jpg',
       },
     ],
     'tokyo-ramen-street': [
@@ -242,20 +239,20 @@ export class RestaurantService {
         name: 'Shoyu Chashu Ramen',
         description: 'Soy broth, pork chashu, soft egg, scallions',
         price: '₱229.00',
-        image: createPlaceholderImage('Shoyu Ramen', 280, 180),
+        image: 'assets/images/meals/shoyu-chashu-ramen.jpg',
         badge: 'Popular',
       },
       {
         name: 'Spicy Miso Ramen',
         description: 'Rich miso broth with chili oil and corn',
         price: '₱249.00',
-        image: createPlaceholderImage('Spicy Miso', 280, 180),
+        image: 'assets/images/meals/spicy-miso-ramen.jpg',
       },
       {
         name: 'Gyoza Plate',
         description: 'Pan-fried dumplings with sesame dip',
         price: '₱139.00',
-        image: createPlaceholderImage('Gyoza', 280, 180),
+        image: 'assets/images/meals/gyoza-plate.jpg',
       },
     ],
     'firegrill-bbq': [
@@ -263,20 +260,20 @@ export class RestaurantService {
         name: 'Smoky Angus Burger',
         description: 'Angus patty, smoked cheddar, onion jam',
         price: '₱215.00',
-        image: createPlaceholderImage('Angus Burger', 280, 180),
+        image: 'assets/images/meals/smoky-angus-burger.jpg',
         badge: 'Best Seller',
       },
       {
         name: 'BBQ Pulled Pork Stack',
         description: 'Slow-cooked pork, pickles, brioche bun',
         price: '₱239.00',
-        image: createPlaceholderImage('Pulled Pork', 280, 180),
+        image: 'assets/images/meals/bbq-pulled-pork-stack.jpg',
       },
       {
         name: 'Loaded Potato Wedges',
         description: 'Cheese sauce, bacon bits, spring onion',
         price: '₱129.00',
-        image: createPlaceholderImage('Potato Wedges', 280, 180),
+        image: 'assets/images/meals/loaded-potato-wedges.jpg',
       },
     ],
     'mediterranean-bowl': [
@@ -284,20 +281,20 @@ export class RestaurantService {
         name: 'Chicken Shawarma Bowl',
         description: 'Herb rice, grilled chicken, garlic yogurt',
         price: '₱185.00',
-        image: createPlaceholderImage('Shawarma Bowl', 280, 180),
+        image: 'assets/images/meals/chicken-shawarma-bowl.jpg',
         badge: 'Healthy',
       },
       {
         name: 'Falafel Hummus Plate',
         description: 'Crispy falafel, hummus, cucumber tomato salad',
         price: '₱169.00',
-        image: createPlaceholderImage('Falafel Plate', 280, 180),
+        image: 'assets/images/meals/falafel-hummus-plate.jpg',
       },
       {
         name: 'Lemon Herb Couscous',
         description: 'Light couscous with roasted vegetables',
         price: '₱149.00',
-        image: createPlaceholderImage('Couscous', 280, 180),
+        image: 'assets/images/meals/lemon-herb-couscous.jpg',
       },
     ],
     'brick-oven-co': [
@@ -305,20 +302,20 @@ export class RestaurantService {
         name: 'Four Cheese Blaze',
         description: 'Mozzarella, parmesan, provolone, cheddar',
         price: '₱279.00',
-        image: createPlaceholderImage('Four Cheese Pizza', 280, 180),
+        image: 'assets/images/meals/four-cheese-blaze.jpg',
         badge: 'Trending',
       },
       {
         name: 'Pepperoni Inferno',
         description: 'Pepperoni, chili flakes, roasted garlic oil',
         price: '₱299.00',
-        image: createPlaceholderImage('Pepperoni Pizza', 280, 180),
+        image: 'assets/images/meals/pepperoni-inferno.jpg',
       },
       {
         name: 'Pesto Mushroom Flatbread',
         description: 'Basil pesto, mushrooms, feta crumble',
         price: '₱219.00',
-        image: createPlaceholderImage('Pesto Flatbread', 280, 180),
+        image: 'assets/images/meals/pesto-mushroom-flatbread.jpg',
       },
     ],
     'green-wok-kitchen': [
@@ -326,20 +323,20 @@ export class RestaurantService {
         name: 'Garlic Shrimp Yakisoba',
         description: 'Stir-fried noodles, shrimp, garlic soy glaze',
         price: '₱169.00',
-        image: createPlaceholderImage('Shrimp Yakisoba', 280, 180),
+        image: 'assets/images/meals/garlic-shrimp-yakisoba.jpg',
         badge: 'New',
       },
       {
         name: 'Teriyaki Tofu Rice',
         description: 'Crispy tofu, teriyaki sauce, sesame seeds',
         price: '₱159.00',
-        image: createPlaceholderImage('Tofu Rice', 280, 180),
+        image: 'assets/images/meals/teriyaki-tofu-rice.jpg',
       },
       {
         name: 'Chicken Katsu Curry',
         description: 'Breaded chicken, curry sauce, steamed rice',
         price: '₱199.00',
-        image: createPlaceholderImage('Katsu Curry', 280, 180),
+        image: 'assets/images/meals/chicken-katsu-curry.jpg',
       },
     ],
   };
