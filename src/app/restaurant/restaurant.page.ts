@@ -14,9 +14,8 @@ import {
 } from '../services/restaurant.service';
 import { navigationItems } from '../shared/app-data';
 import {
-  findMatchedAllergyKeyword,
-  getAllergyKeywords,
   loadPersonalTasteState,
+  matchMealToTaste,
   PersonalTasteState,
 } from '../shared/personal-taste';
 
@@ -300,20 +299,19 @@ export class RestaurantPage implements OnDestroy, OnInit {
   }
 
   getMealAllergyPrompt(meal: RestaurantMeal): string | null {
-    const keywords = getAllergyKeywords(this.personalTaste);
+    const matched = matchMealToTaste(meal, this.personalTaste).allergy;
+    return matched ? `Allergy alert: ${matched}` : null;
+  }
 
-    if (!keywords.length) {
-      return null;
-    }
+  /** Amber note for ingredients the user prefers to avoid (only when there is no allergy alert). */
+  getMealAvoidPrompt(meal: RestaurantMeal): string | null {
+    const match = matchMealToTaste(meal, this.personalTaste);
+    return !match.allergy && match.avoid ? `Contains ${match.avoid.toLowerCase()}` : null;
+  }
 
-    const mealText = `${meal.name} ${meal.description}`;
-    const matched = findMatchedAllergyKeyword(mealText, keywords);
-
-    if (matched) {
-      return `Allergy alert: ${matched}`;
-    }
-
-    return null;
+  mealFitsDiet(meal: RestaurantMeal): boolean {
+    const match = matchMealToTaste(meal, this.personalTaste);
+    return match.fitsDiets && !match.allergy && !match.avoid;
   }
 
   private hydrateReviews(restaurantId: string): void {

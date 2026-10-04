@@ -459,3 +459,63 @@
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
   }
 }
+
+.taste-edit {
+  border: none;
+  background: transparent;
+  color: #6d28d9;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.picked-pill {
+  min-width: 230px;
+}
+
+.picked-reason {
+  color: #15803d !important;
+  font-weight: 700;
+}
+
+.taste-invite {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 4px 0 6px;
+  border: none;
+  border-radius: 18px;
+  padding: 14px;
+  background: linear-gradient(135deg, #6d28d9, #a855f7);
+  color: #ffffff;
+  text-align: left;
+  box-shadow: 0 10px 24px rgba(109, 40, 217, 0.25);
+  font-size: 1.2rem;
+}
+
+.taste-invite-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.taste-invite-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.taste-invite-copy strong {
+  font-size: 0.95rem;
+}
+
+.taste-invite-copy small {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}

@@ -30,6 +30,7 @@
         <div class="meal-image-wrap">
           <img [src]="meal.image" [alt]="meal.name" />
           <span class="allergy-prompt" *ngIf="getMealAllergyPrompt(meal) as prompt">{{ prompt }}</span>
+          <span class="allergy-prompt avoid-prompt" *ngIf="getMealAvoidPrompt(meal) as prompt">{{ prompt }}</span>
         </div>
 
         <div class="meal-copy">
@@ -39,6 +40,7 @@
           </div>
 
           <p>{{ meal.description }}</p>
+          <span class="taste-fit" *ngIf="mealFitsDiet(meal)">✓ Fits your diet</span>
           <strong>{{ meal.price }}</strong>
         </div>
 

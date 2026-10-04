@@ -6,6 +6,12 @@ import { Subscription } from 'rxjs';
 import { LocalDataService } from '../services/local-data.service';
 import { Restaurant, RestaurantMeal, RestaurantService } from '../services/restaurant.service';
 import { Category, foodCategories, navigationItems } from '../shared/app-data';
+import {
+  describeTasteReason,
+  hasPersonalTaste,
+  loadPersonalTasteState,
+  scoreMealForTaste,
+} from '../shared/personal-taste';
 
 type HomeMeal = {
   restaurantId: string;
@@ -14,6 +20,8 @@ type HomeMeal = {
   mealPrice: string;
   mealImage: string;
 };
+
+type PickedMeal = HomeMeal & { reason: string; score: number };
 
 @Component({
   selector: 'app-home',
@@ -27,6 +35,8 @@ export class HomePage implements OnInit, OnDestroy {
   orderNotice = '';
   deliveryLocationLabel = 'Current Location';
   unreadNotificationCount = 0;
+  hasTaste = false;
+  pickedMeals: PickedMeal[] = [];
   private notificationSubscription?: Subscription;
 
   categories: Category[] = foodCategories;
@@ -63,6 +73,7 @@ export class HomePage implements OnInit, OnDestroy {
   ionViewWillEnter(): void {
     if (this.localDataService.isSignedIn()) {
       this.refreshHeader();
+      this.changeDetector.markForCheck();
     }
   }
 
@@ -74,12 +85,53 @@ export class HomePage implements OnInit, OnDestroy {
     this.router.navigateByUrl('/notifications');
   }
 
+  openPersonalTaste(): void {
+    this.router.navigateByUrl('/personal-taste');
+  }
+
+  openPickedMeal(meal: PickedMeal): void {
+    this.router.navigateByUrl(`/restaurant/${meal.restaurantId}`, {
+      state: { highlightMealName: meal.mealName },
+    });
+  }
+
   private refreshHeader(): void {
     const primaryAddress = this.localDataService.getPrimaryAddressForCurrentUser();
     this.deliveryLocationLabel = primaryAddress
       ? `${primaryAddress.label} · ${primaryAddress.addressLine.split(',')[0]}`
       : 'Current Location';
     this.unreadNotificationCount = this.localDataService.getUnreadNotificationCountForCurrentUser();
+    this.refreshPicks();
+  }
+
+  /** Ranks every meal against the saved Personal Taste; best matches first, at most one per restaurant first pass. */
+  private refreshPicks(): void {
+    const taste = loadPersonalTasteState();
+    this.hasTaste = hasPersonalTaste(taste);
+
+    if (!this.hasTaste) {
+      this.pickedMeals = [];
+      return;
+    }
+
+    const candidates: PickedMeal[] = this.restaurantService.getRestaurants().flatMap((restaurant) =>
+      this.restaurantService.getMealsByRestaurant(restaurant.id).flatMap((meal) => {
+        const score = scoreMealForTaste(meal, taste);
+        return score === null ? [] : [{
+          restaurantId: restaurant.id,
+          restaurantName: restaurant.name,
+          mealName: meal.name,
+          mealPrice: meal.price,
+          mealImage: meal.image,
+          reason: describeTasteReason(meal, taste),
+          score: score + restaurant.rating / 10,
+        }];
+      }),
+    );
+
+    const ranked = candidates.sort((first, second) => second.score - first.score);
+    const varied = ranked.filter((meal, index) => ranked.findIndex((other) => other.restaurantId === meal.restaurantId) === index);
+    this.pickedMeals = [...varied, ...ranked.filter((meal) => !varied.includes(meal))].slice(0, 8);
   }
 
   get filteredRestaurants() {

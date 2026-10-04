@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import { LocalDataService, StoredMealCartItem } from '../services/local-data.service';
 import { Restaurant, RestaurantMeal, RestaurantService } from '../services/restaurant.service';
+import { loadPersonalTasteState, matchMealToTaste, MealTasteMatch } from '../shared/personal-taste';
 
 @Component({
   selector: 'app-meal',
@@ -20,6 +21,9 @@ export class MealPage implements OnInit {
   spicy = false;
   quantity = 1;
   notes = '';
+  tasteMatch: MealTasteMatch | null = null;
+  spiceFromTaste = '';
+  notesFromTaste = false;
   private editingOriginalItem: StoredMealCartItem | null = null;
   private returnToCart = false;
 
@@ -80,6 +84,22 @@ export class MealPage implements OnInit {
     }
 
     this.returnToCart = !!state.returnToCart;
+
+    const taste = loadPersonalTasteState();
+    this.tasteMatch = matchMealToTaste(meal, taste);
+
+    // Start from the user's Personal Taste, unless they are editing an item they already customized.
+    if (!state.editItem) {
+      if (taste.spiceLevel !== 'Medium') {
+        this.spicy = taste.spiceLevel === 'Spicy';
+        this.spiceFromTaste = taste.spiceLevel;
+      }
+
+      if (taste.cookingPreferences.length) {
+        this.notes = taste.cookingPreferences.join(', ');
+        this.notesFromTaste = true;
+      }
+    }
   }
 
   get computedMealPrice(): string {

@@ -45,6 +45,44 @@
         </button>
       </div>
 
+      <ng-container *ngIf="hasTaste; else tasteInvite">
+        <div class="section-header">
+          <h2>Picked for you</h2>
+          <button type="button" class="taste-edit" (click)="openPersonalTaste()">Your taste ›</button>
+        </div>
+
+        <section class="meal-row picked-row" *ngIf="pickedMeals.length; else noPicks">
+          <button
+            type="button"
+            class="meal-pill picked-pill"
+            *ngFor="let meal of pickedMeals"
+            (click)="openPickedMeal(meal)"
+          >
+            <img class="meal-pill-image" [src]="meal.mealImage" [alt]="meal.mealName" />
+            <span class="meal-pill-copy">
+              <strong>{{ meal.mealName }}</strong>
+              <small>{{ meal.restaurantName }} · {{ meal.mealPrice }}</small>
+              <small class="picked-reason">✓ {{ meal.reason }}</small>
+            </span>
+          </button>
+        </section>
+
+        <ng-template #noPicks>
+          <p class="order-notice">No meals match every preference yet. Try loosening your Personal Taste.</p>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #tasteInvite>
+        <button type="button" class="taste-invite" (click)="openPersonalTaste()">
+          <span class="taste-invite-icon" aria-hidden="true">🍽️</span>
+          <span class="taste-invite-copy">
+            <strong>Make Food 4U yours</strong>
+            <small>Tell us your diet, allergies and spice level, and we'll pick meals for you.</small>
+          </span>
+          <span aria-hidden="true">›</span>
+        </button>
+      </ng-template>
+
       <div class="section-header">
         <h2>{{ selectedCategory === 'Offers' ? 'All Restaurants' : selectedCategory }}</h2>
         <span>{{ filteredRestaurants.length }} places</span>

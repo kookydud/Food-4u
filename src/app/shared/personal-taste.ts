@@ -95,13 +95,122 @@ export function findMatchedAllergyKeyword(mealText: string, keywords: string[]):
 
   for (const keyword of keywords) {
     const candidate = keyword.toLowerCase();
+    // Also match the singular form, so "Onions" catches "spring onion" and "Peanuts" catches "peanut sauce".
+    const singular = candidate.length > 3 && candidate.endsWith('s') ? candidate.slice(0, -1) : candidate;
 
-    if (candidate && normalizedMealText.includes(candidate)) {
+    if (candidate && (normalizedMealText.includes(candidate) || normalizedMealText.includes(singular))) {
       return keyword;
     }
   }
 
   return null;
+}
+
+/** The parts of a meal that personalization looks at. */
+export type TasteAwareMeal = {
+  name: string;
+  description: string;
+  tags?: string[];
+  allergens?: string[];
+};
+
+export type MealTasteMatch = {
+  /** Allergy keyword this meal triggers, if any. */
+  allergy: string | null;
+  /** Avoided ingredient this meal contains, if any. */
+  avoid: string | null;
+  /** True when the user picked diets and the meal fits every one of them. */
+  fitsDiets: boolean;
+  spicy: boolean;
+};
+
+export function hasPersonalTaste(state: PersonalTasteState): boolean {
+  return (
+    state.diets.length > 0
+    || getAllergyKeywords(state).length > 0
+    || state.avoidIngredients.length > 0
+    || state.cookingPreferences.length > 0
+    || state.spiceLevel !== 'Medium'
+  );
+}
+
+/** Vegetarian meals also suit pescatarian, no-pork and halal-friendly diets; pescatarian meals suit no-pork and halal-friendly. */
+export function expandMealDiets(tags: string[] = []): Set<string> {
+  const diets = new Set(tags);
+
+  if (diets.has('Vegetarian')) {
+    ['Pescatarian', 'No pork', 'Halal-friendly'].forEach((diet) => diets.add(diet));
+  }
+
+  if (diets.has('Pescatarian')) {
+    ['No pork', 'Halal-friendly'].forEach((diet) => diets.add(diet));
+  }
+
+  return diets;
+}
+
+export function matchMealToTaste(meal: TasteAwareMeal, state: PersonalTasteState): MealTasteMatch {
+  const mealText = `${meal.name} ${meal.description}`;
+  const allergyKeywords = getAllergyKeywords(state);
+  const listedAllergen = allergyKeywords.find((keyword) =>
+    (meal.allergens ?? []).some((allergen) => allergen.toLowerCase() === keyword.toLowerCase()),
+  );
+  const diets = expandMealDiets(meal.tags);
+
+  return {
+    allergy: listedAllergen ?? findMatchedAllergyKeyword(mealText, allergyKeywords),
+    avoid: findMatchedAllergyKeyword(mealText, state.avoidIngredients),
+    fitsDiets: state.diets.length > 0 && state.diets.every((diet) => diets.has(diet)),
+    spicy: diets.has('Spicy'),
+  };
+}
+
+/**
+ * Ranks a meal for "Picked for you". Returns null when the meal should never be suggested
+ * (allergy, avoided ingredient, wrong diet, or too spicy for a mild eater).
+ */
+export function scoreMealForTaste(meal: TasteAwareMeal, state: PersonalTasteState): number | null {
+  const match = matchMealToTaste(meal, state);
+
+  if (match.allergy || match.avoid) {
+    return null;
+  }
+
+  if (state.diets.length && !match.fitsDiets) {
+    return null;
+  }
+
+  if (state.spiceLevel === 'Mild' && match.spicy) {
+    return null;
+  }
+
+  let score = match.fitsDiets ? 3 : 0;
+
+  if (state.spiceLevel === 'Spicy' && match.spicy) {
+    score += 2;
+  }
+
+  return score;
+}
+
+/** Short reason shown under a suggested meal, e.g. "Vegetarian · Halal-friendly". */
+export function describeTasteReason(meal: TasteAwareMeal, state: PersonalTasteState): string {
+  const match = matchMealToTaste(meal, state);
+  const reasons: string[] = [];
+
+  if (match.fitsDiets) {
+    reasons.push(state.diets.join(' · '));
+  }
+
+  if (state.spiceLevel === 'Spicy' && match.spicy) {
+    reasons.push('Spicy');
+  }
+
+  if (!reasons.length && getAllergyKeywords(state).length) {
+    reasons.push(`Free of ${getAllergyKeywords(state).slice(0, 2).join(' & ').toLowerCase()}`);
+  }
+
+  return reasons.join(' · ') || 'Matches your taste';
 }
 
 function normalizeSpiceLevel(level: unknown): SpiceLevel {

@@ -130,8 +130,8 @@ export class PersonalTastePage implements OnInit {
     savePersonalTasteState(state);
     const allergyCount = getAllergyKeywords(state).length;
     this.saveMessage = allergyCount
-      ? `Preferences saved. ${allergyCount} allergy warning keyword(s) active.`
-      : 'Preferences saved.';
+      ? `Saved! Menus now warn you about ${allergyCount} allergen${allergyCount === 1 ? '' : 's'}, and Home picks meals for you.`
+      : 'Saved! Home now picks meals for you.';
   }
 
   private applySavedSelection(options: PreferenceOption[], selectedLabels: string[]): void {

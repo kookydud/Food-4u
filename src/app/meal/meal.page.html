@@ -14,6 +14,15 @@
       </div>
     </section>
 
+    <ng-container *ngIf="tasteMatch as match">
+      <section class="taste-warning" *ngIf="match.allergy">
+        ⚠️ Contains <strong>{{ match.allergy }}</strong>, which is on your allergy list.
+      </section>
+      <section class="taste-warning avoid" *ngIf="!match.allergy && match.avoid">
+        Heads up: contains {{ match.avoid | lowercase }}, which you prefer to avoid.
+      </section>
+    </ng-container>
+
     <section class="option-group">
       <h3>Size</h3>
       <div class="size-row">
@@ -36,6 +45,7 @@
         <button type="button" class="toggle-btn" [class.active]="!spicy" (click)="spicy = false">Not Spicy</button>
         <button type="button" class="toggle-btn" [class.active]="spicy" (click)="spicy = true">Spicy</button>
       </div>
+      <p class="taste-hint" *ngIf="spiceFromTaste">Set from your Personal Taste ({{ spiceFromTaste }})</p>
     </section>
 
     <section class="option-group">
@@ -50,6 +60,7 @@
     <section class="option-group">
       <h3>Notes (Optional)</h3>
       <textarea [(ngModel)]="notes" maxlength="120" placeholder="No onions, extra sauce, etc."></textarea>
+      <p class="taste-hint" *ngIf="notesFromTaste">Pre-filled from your cooking preferences</p>
     </section>
   </div>
 

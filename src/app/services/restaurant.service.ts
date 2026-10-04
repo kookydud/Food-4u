@@ -19,6 +19,9 @@ export type RestaurantMeal = {
   price: string;
   image: string;
   badge?: string;
+  /** Diets the meal fits, plus 'Spicy'. Vegetarian/Pescatarian imply the broader diets (see personal-taste.ts). */
+  tags?: string[];
+  allergens?: string[];
 };
 
 export type RestaurantReview = {
@@ -156,6 +159,8 @@ export class RestaurantService {
         description: 'Fresh basil, mozzarella, tomato sauce',
         price: '₱299.00',
         image: 'assets/images/meals/chefs-margherita.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Dairy', 'Gluten'],
         badge: 'Popular',
       },
       {
@@ -163,12 +168,16 @@ export class RestaurantService {
         description: 'Creamy truffle sauce with parmesan',
         price: '₱249.00',
         image: 'assets/images/meals/house-truffle-pasta.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Dairy', 'Gluten'],
       },
       {
         name: 'Garden Side Salad',
         description: 'Fresh greens with lemon dressing',
         price: '₱119.00',
         image: 'assets/images/meals/garden-side-salad.jpg',
+        tags: ['Vegetarian', 'Low carb', 'Keto-friendly'],
+        allergens: [],
       },
     ],
     'sakura-garden': [
@@ -177,6 +186,8 @@ export class RestaurantService {
         description: 'Salmon, avocado, cucumber',
         price: '₱175.00',
         image: 'assets/images/meals/signature-salmon-roll.jpg',
+        tags: ['Pescatarian'],
+        allergens: ['Seafood', 'Soy', 'Sesame'],
         badge: 'Best Seller',
       },
       {
@@ -184,12 +195,16 @@ export class RestaurantService {
         description: 'Eel sauce, tempura flakes, crabstick',
         price: '₱209.00',
         image: 'assets/images/meals/dragon-maki.jpg',
+        tags: ['Pescatarian'],
+        allergens: ['Seafood', 'Shellfish', 'Egg', 'Soy', 'Gluten'],
       },
       {
         name: 'Seaweed Salad',
         description: 'Sesame, soy vinaigrette',
         price: '₱99.00',
         image: 'assets/images/meals/seaweed-salad.jpg',
+        tags: ['Vegetarian', 'Low carb'],
+        allergens: ['Soy', 'Sesame'],
       },
     ],
     'the-burger-lab': [
@@ -198,6 +213,8 @@ export class RestaurantService {
         description: 'Double patty, cheddar, house sauce',
         price: '₱265.00',
         image: 'assets/images/meals/lab-double-cheeseburger.jpg',
+        tags: ['No pork'],
+        allergens: ['Dairy', 'Gluten', 'Egg'],
         badge: 'Popular',
       },
       {
@@ -205,12 +222,16 @@ export class RestaurantService {
         description: 'Smoked bacon, lettuce, pickles',
         price: '₱239.00',
         image: 'assets/images/meals/classic-bacon-burger.jpg',
+        tags: [],
+        allergens: ['Dairy', 'Gluten'],
       },
       {
         name: 'Crunchy Side Salad',
         description: 'Romaine, cherry tomatoes, dressing',
         price: '₱109.00',
         image: 'assets/images/meals/crunchy-side-salad.jpg',
+        tags: ['Vegetarian', 'Low carb', 'Keto-friendly'],
+        allergens: [],
       },
     ],
     'spice-route': [
@@ -219,6 +240,8 @@ export class RestaurantService {
         description: "Today's freshest ingredients",
         price: '₱199.00',
         image: 'assets/images/meals/chefs-special-curry.jpg',
+        tags: ['Halal-friendly', 'No pork', 'Spicy'],
+        allergens: ['Dairy'],
         badge: 'Popular',
       },
       {
@@ -226,12 +249,16 @@ export class RestaurantService {
         description: 'A classic crowd favourite',
         price: '₱189.00',
         image: 'assets/images/meals/house-signature-curry.jpg',
+        tags: ['Halal-friendly', 'No pork'],
+        allergens: ['Dairy'],
       },
       {
         name: 'Side Salad',
         description: 'Fresh greens, house dressing',
         price: '₱99.00',
         image: 'assets/images/meals/side-salad.jpg',
+        tags: ['Vegetarian', 'Low carb', 'Keto-friendly'],
+        allergens: [],
       },
     ],
     'tokyo-ramen-street': [
@@ -240,6 +267,8 @@ export class RestaurantService {
         description: 'Soy broth, pork chashu, soft egg, scallions',
         price: '₱229.00',
         image: 'assets/images/meals/shoyu-chashu-ramen.jpg',
+        tags: [],
+        allergens: ['Soy', 'Egg', 'Gluten'],
         badge: 'Popular',
       },
       {
@@ -247,12 +276,16 @@ export class RestaurantService {
         description: 'Rich miso broth with chili oil and corn',
         price: '₱249.00',
         image: 'assets/images/meals/spicy-miso-ramen.jpg',
+        tags: ['Spicy'],
+        allergens: ['Soy', 'Gluten', 'Sesame'],
       },
       {
         name: 'Gyoza Plate',
         description: 'Pan-fried dumplings with sesame dip',
         price: '₱139.00',
         image: 'assets/images/meals/gyoza-plate.jpg',
+        tags: [],
+        allergens: ['Gluten', 'Soy', 'Sesame'],
       },
     ],
     'firegrill-bbq': [
@@ -261,6 +294,8 @@ export class RestaurantService {
         description: 'Angus patty, smoked cheddar, onion jam',
         price: '₱215.00',
         image: 'assets/images/meals/smoky-angus-burger.jpg',
+        tags: ['No pork'],
+        allergens: ['Dairy', 'Gluten'],
         badge: 'Best Seller',
       },
       {
@@ -268,12 +303,16 @@ export class RestaurantService {
         description: 'Slow-cooked pork, pickles, brioche bun',
         price: '₱239.00',
         image: 'assets/images/meals/bbq-pulled-pork-stack.jpg',
+        tags: [],
+        allergens: ['Gluten'],
       },
       {
         name: 'Loaded Potato Wedges',
         description: 'Cheese sauce, bacon bits, spring onion',
         price: '₱129.00',
         image: 'assets/images/meals/loaded-potato-wedges.jpg',
+        tags: [],
+        allergens: ['Dairy'],
       },
     ],
     'mediterranean-bowl': [
@@ -282,6 +321,8 @@ export class RestaurantService {
         description: 'Herb rice, grilled chicken, garlic yogurt',
         price: '₱185.00',
         image: 'assets/images/meals/chicken-shawarma-bowl.jpg',
+        tags: ['Halal-friendly', 'No pork'],
+        allergens: ['Dairy'],
         badge: 'Healthy',
       },
       {
@@ -289,12 +330,16 @@ export class RestaurantService {
         description: 'Crispy falafel, hummus, cucumber tomato salad',
         price: '₱169.00',
         image: 'assets/images/meals/falafel-hummus-plate.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Sesame'],
       },
       {
         name: 'Lemon Herb Couscous',
         description: 'Light couscous with roasted vegetables',
         price: '₱149.00',
         image: 'assets/images/meals/lemon-herb-couscous.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Gluten'],
       },
     ],
     'brick-oven-co': [
@@ -303,6 +348,8 @@ export class RestaurantService {
         description: 'Mozzarella, parmesan, provolone, cheddar',
         price: '₱279.00',
         image: 'assets/images/meals/four-cheese-blaze.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Dairy', 'Gluten'],
         badge: 'Trending',
       },
       {
@@ -310,12 +357,16 @@ export class RestaurantService {
         description: 'Pepperoni, chili flakes, roasted garlic oil',
         price: '₱299.00',
         image: 'assets/images/meals/pepperoni-inferno.jpg',
+        tags: ['Spicy'],
+        allergens: ['Dairy', 'Gluten'],
       },
       {
         name: 'Pesto Mushroom Flatbread',
         description: 'Basil pesto, mushrooms, feta crumble',
         price: '₱219.00',
         image: 'assets/images/meals/pesto-mushroom-flatbread.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Dairy', 'Gluten'],
       },
     ],
     'green-wok-kitchen': [
@@ -324,6 +375,8 @@ export class RestaurantService {
         description: 'Stir-fried noodles, shrimp, garlic soy glaze',
         price: '₱169.00',
         image: 'assets/images/meals/garlic-shrimp-yakisoba.jpg',
+        tags: ['Pescatarian'],
+        allergens: ['Seafood', 'Shellfish', 'Soy', 'Gluten'],
         badge: 'New',
       },
       {
@@ -331,12 +384,16 @@ export class RestaurantService {
         description: 'Crispy tofu, teriyaki sauce, sesame seeds',
         price: '₱159.00',
         image: 'assets/images/meals/teriyaki-tofu-rice.jpg',
+        tags: ['Vegetarian'],
+        allergens: ['Soy', 'Sesame'],
       },
       {
         name: 'Chicken Katsu Curry',
         description: 'Breaded chicken, curry sauce, steamed rice',
         price: '₱199.00',
         image: 'assets/images/meals/chicken-katsu-curry.jpg',
+        tags: ['Halal-friendly', 'No pork'],
+        allergens: ['Gluten', 'Egg'],
       },
     ],
   };
