@@ -134,3 +134,10 @@ ion-content * {
   padding-top: 30px;
 }
 
+/*
+ * Login / sign-up: keep typed passwords clear of the "Show" button.
+ * (Ionic creates this inner input at runtime, so it can't be styled from the page's own styles.)
+ */
+.password-wrapper ion-input input.native-input {
+  padding-inline-end: 48px;
+}

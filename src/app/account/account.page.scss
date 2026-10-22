@@ -72,18 +72,21 @@
 }
 
 .profile-label {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   color: rgba(255, 255, 255, 0.68);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .profile-copy h2 {
   margin: 0;
   color: #ffffff;
   font-size: 1.25rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .profile-copy p {

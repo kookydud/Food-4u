@@ -519,3 +519,13 @@
   font-size: 0.75rem;
   opacity: 0.9;
 }
+
+// Buttons get line-height: 1 from normalize.css; give multi-line cards normal spacing.
+.meal-pill,
+.taste-invite {
+  line-height: 1.3;
+}
+
+.meal-pill-copy {
+  gap: 2px;
+}
