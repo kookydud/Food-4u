@@ -78,6 +78,20 @@
   font-size: 18px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+// Drawn icon: the old "🕭" character has no glyph in Android's fonts and showed as a box.
+.bell-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .bell-badge {
@@ -177,7 +191,7 @@
   scrollbar-width: none;
   flex: 0 0 auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y;
 }
 
 .category-image-wrap {
@@ -268,7 +282,7 @@
   padding: 0 0 8px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y;
 }
 
 .meal-row::-webkit-scrollbar {

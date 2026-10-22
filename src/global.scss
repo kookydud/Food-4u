@@ -48,6 +48,9 @@
   --app-safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   /* Extra room the bottom nav needs beyond its built-in 25px bottom padding. */
   --app-nav-extra: max(0px, calc(var(--app-safe-bottom) - 17px));
+  /* The top bar's old 30px top padding was a stand-in for a status bar. With a real status bar,
+     drop up to 20px of it (never below 10px) so phones don't get both. 0 on desktop. */
+  --app-top-trim: min(20px, var(--app-safe-top));
   --ion-safe-area-top: var(--app-safe-top);
   --ion-safe-area-bottom: var(--app-safe-bottom);
 }
@@ -58,12 +61,18 @@ ion-content {
   --padding-bottom: var(--app-safe-bottom);
 }
 
+/* Pages with the fixed top bar: content moves up by the same amount the bar was trimmed. */
+ion-content:has(.topbar) {
+  --padding-top: calc(var(--app-safe-top) - var(--app-top-trim));
+}
+
 /*
  * No rubber-band / Android "stretch" overscroll: it stretched the whole scroll area,
  * including the fixed top bar and bottom nav, when scrolling past the end of a page.
+ * Only the page's own scroller: inner scrollers (sideways rows) must keep passing
+ * vertical swipes on to the page.
  */
-ion-content::part(scroll),
-ion-content * {
+ion-content::part(scroll) {
   overscroll-behavior-y: none;
 }
 
@@ -130,8 +139,8 @@ ion-content * {
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
   /* The transparent border reserves the status bar; the bar's background shows through it. */
   border-top: var(--app-safe-top) solid transparent;
-  height: calc(85px + var(--app-safe-top));
-  padding-top: 30px;
+  height: calc(85px + var(--app-safe-top) - var(--app-top-trim));
+  padding-top: calc(30px - var(--app-top-trim));
 }
 
 /*

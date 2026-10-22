@@ -7,7 +7,10 @@
         <span class="location">{{ deliveryLocationLabel }} ▾ </span>
       </button>
       <button type="button" class="bell-btn" aria-label="Notifications" (click)="openNotifications()">
-        🕭
+        <svg class="bell-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.6 1.8H4.4L6 16.5Z" />
+          <path d="M10 20.5a2.2 2.2 0 0 0 4 0" />
+        </svg>
         <span class="bell-badge" *ngIf="unreadNotificationCount">{{ unreadNotificationCount > 9 ? '9+' : unreadNotificationCount }}</span>
       </button>
       
