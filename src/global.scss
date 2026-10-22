@@ -36,6 +36,37 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+/*
+ * Phone safe areas (status bar on top, gesture / navigation bar at the bottom)
+ * -----------------------------------------------------------------------------
+ * On Android, Capacitor's SystemBars plugin injects --safe-area-inset-*.
+ * Browsers and iOS provide env(safe-area-inset-*). Both are 0 on a desktop browser,
+ * so the layout there is unchanged.
+ */
+:root {
+  --app-safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --app-safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  /* Extra room the bottom nav needs beyond its built-in 25px bottom padding. */
+  --app-nav-extra: max(0px, calc(var(--app-safe-bottom) - 17px));
+  --ion-safe-area-top: var(--app-safe-top);
+  --ion-safe-area-bottom: var(--app-safe-bottom);
+}
+
+/* Every page starts below the status bar and ends above the gesture bar. */
+ion-content {
+  --padding-top: var(--app-safe-top);
+  --padding-bottom: var(--app-safe-bottom);
+}
+
+/*
+ * No rubber-band / Android "stretch" overscroll: it stretched the whole scroll area,
+ * including the fixed top bar and bottom nav, when scrolling past the end of a page.
+ */
+ion-content::part(scroll),
+ion-content * {
+  overscroll-behavior-y: none;
+}
+
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -49,7 +80,7 @@
   align-items: center;
   padding: 8px 6px 10px;
   z-index: 10;
-  padding-bottom: 25px;
+  padding-bottom: calc(25px + var(--app-nav-extra));
 }
 
 .nav-item {
@@ -97,7 +128,9 @@
   background: rgba(255, 255, 255, 0.9);
   border-radius: 0;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
-  height: 85px;
+  /* The transparent border reserves the status bar; the bar's background shows through it. */
+  border-top: var(--app-safe-top) solid transparent;
+  height: calc(85px + var(--app-safe-top));
   padding-top: 30px;
 }
 

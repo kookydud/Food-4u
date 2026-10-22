@@ -203,7 +203,7 @@
   position: fixed;
   left: 12px;
   right: 12px;
-  bottom: 12px;
+  bottom: calc(12px + var(--app-safe-bottom));
   border-radius: 16px;
   background: #ffffff;
   border: 1px solid #e5e7eb;

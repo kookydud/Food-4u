@@ -4,7 +4,8 @@
 
 .payment-shell {
   min-height: 100dvh;
-  padding: 16px 14px 28px;
+  /* Clears the fixed 85px top bar plus a 12px gap. */
+  padding: 97px 14px 28px;
 }
 
 .topbar {

@@ -151,7 +151,7 @@
   position: fixed;
   left: 12px;
   right: 12px;
-  bottom: 14px;
+  bottom: calc(14px + var(--app-safe-bottom));
   z-index: 8;
 }
 

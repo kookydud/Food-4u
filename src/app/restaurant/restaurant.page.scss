@@ -1,4 +1,5 @@
 .restaurant-page {
+  --padding-top: 0;
   --background: #ececf8;
 }
 
@@ -7,16 +8,16 @@
 }
 
 .hero {
-  min-height: 250px;
+  min-height: calc(250px + var(--app-safe-top));
   background-size: cover;
   background-position: center;
   position: relative;
 }
 
 .hero-overlay {
-  min-height: 250px;
+  min-height: calc(250px + var(--app-safe-top));
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45));
-  padding: 16px;
+  padding: calc(16px + var(--app-safe-top)) 16px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -211,7 +212,7 @@
   position: fixed;
   left: 12px;
   right: 12px;
-  bottom: 78px;
+  bottom: calc(78px + var(--app-nav-extra));
   border-radius: 16px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -503,7 +504,7 @@
   position: fixed;
   left: 12px;
   right: 12px;
-  bottom: 78px;
+  bottom: calc(78px + var(--app-nav-extra));
   border-radius: 16px;
   padding: 10px;
   background: #ffffff;
